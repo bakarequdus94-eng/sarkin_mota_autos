@@ -1,0 +1,213 @@
+{% extends 'showroom/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarkin Mota Autos</title>
+    <style>
+        .header h1 {
+    font-size: 3rem;
+    color: #FFD700; /* Gold */
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+}
+
+.header p {
+    color: #ffffff;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: white; margin: 0; }
+        .header { text-align: center; padding: 40px 20px; background: linear-gradient(to bottom, #1a1a1a, #0f0f0f); }
+        
+        /* THE GRID: Forces 1 column on mobile, changes on laptop */
+        .showroom {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .car-card {
+            background: #1e1e1e;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* LARGE IMAGES */
+        .car-card img {
+            width: 100%;
+            height: 350px; /* Big photos for mobile */
+            object-fit: cover;
+            display: block;
+        }
+
+        .car-info { padding: 25px; }
+        .brand { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+        .price { color: #2ecc71; font-weight: bold; font-size: 1.8rem; margin: 10px 0; }
+
+        /* LAPTOP OVERRIDE: 2 or 3 columns */
+        @media (min-width: 900px) {
+            .showroom {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+            .car-card img {
+                height: 250px; /* Shorter height for the grid look */
+            }
+        }
+        .pagination {
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+
+.page-link {
+    color: #BF953F; /* Gold text */
+    background: #1a1a1a;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #333;
+    border-radius: 5px;
+    transition: 0.3s;
+    margin: 0 4px;
+}
+
+.page-link:hover {
+    background: #BF953F;
+    color: #000;
+}
+
+.current-page {
+    color: #888;
+    margin: 0 15px;
+    font-size: 0.9rem;
+}
+.car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 20px 0;
+}
+
+.car-card {
+    background: #1a1a1a; /* Dark luxury background */
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #333;
+    transition: transform 0.3s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+    border-color: #BF953F; /* Gold border on hover */
+}
+
+.car-card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.car-card-info {
+    padding: 15px;
+}
+
+.brand-label {
+    color: #888;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.car-name {
+    margin: 5px 0;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.short-description {
+    color: #bbb;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.price-tag {
+    color: #BF953F;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+  <div style="padding: 20px; max-width: 1200px; margin: auto;">
+    <a href="{% url 'landing' %}" style="color: #FFD700; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">←</span> EXIT TO HOME
+    </a>
+</div> 
+    <div class="header">
+        <h1>Sarkin Mota Autos</h1>
+        <p>Nigeria's leading luxury auto dealership. We make owing your dream car easy with 40% initial deposit, flexible repayment plans, warranties, and premium after-sales service. More than a dealership, we are a lifestyle brand built on trust, excellence, and prestige</p>
+    </div>
+<div class="search-container" style="max-width: 600px; margin: -30px auto 30px; padding: 0 20px; position: relative; z-index: 10;">
+    <form action="{% url 'car_list' %}" method="get" style="display: flex; gap: 10px;">
+        <input type="text" name="q" placeholder="Search for Mercedes, BMW, SUV..." 
+               style="flex: 1; padding: 15px 20px; border-radius: 50px; border: 1px solid #FFD700; background: #1a1a1a; color: white; font-size: 1rem; outline: none;">
+        <button type="submit" 
+                style="padding: 10px 25px; border-radius: 50px; border: none; background: #FFD700; color: black; font-weight: bold; cursor: pointer; transition: 0.3s;">
+            Search
+        </button>
+    </form>
+</div>
+   <!-- Your Car Grid -->
+<div class="car-grid">
+    {% for car in page_obj %}
+        <div class="car-card">
+            <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit;">
+                <img src="{{ car.image.url }}" class="car-card-img" alt="{{ car.name }}">
+                <div class="car-card-info">
+                    <span class="brand-label">{{ car.brand }}</span>
+                    <h3 class="car-name">{{ car.name }}</h3>
+                    <!-- This adds the short description back -->
+                    <p class="short-description">{{ car.description|truncatewords:15 }}</p>
+                    <p class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</p>
+                </div>
+            </a>
+        </div>
+    {% empty %}
+        <p style="color: #888; text-align: center; width: 100%;">No cars available in the showroom yet.</p>
+    {% endfor %}
+</div>
+
+<!-- Numeric Pagination -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="page-link">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Prev</a>
+        {% endif %}
+
+        <span class="current-page">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+</body>
+</html>
+{% endblock %}

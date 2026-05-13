@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarkin Mota Autos | Luxury & Performance</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- FIXED SLIDER ENGINE --- */
+.slider-wrapper {
+    width: 100%;
+    overflow-x: auto; /* This enables horizontal scrolling */
+    white-space: nowrap;
+    padding: 20px 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.slider {
+    display: flex; /* Keeps everything in a straight line */
+    gap: 15px;
+    padding-bottom: 10px;
+}
+
+.slide {
+    flex: 0 0 auto; /* Prevents images from shrinking */
+    width: 280px;   /* Consistent size for all items */
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1a1a1a;
+}
+
+.slide img, .slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Prevents stretching */
+    display: block;
+}
+
+/* --- FOOTER SPACING FIX --- */
+footer {
+    clear: both;
+    margin-top: 50px; /* Keeps distance from the gallery */
+    border-top: 1px solid #333;
+}
+</style>
+<style>
+/* --- TAMING THE LOGO --- */
+.footer-logo {
+    width: auto;
+    height: 80px;            /* This is the 'Sweet Spot' for mobile */
+    max-width: 180px;        /* Prevents it from getting too wide */
+    object-fit: contain;     /* Ensures the logo isn't squashed */
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 5px rgba(191, 149, 63, 0.2)); /* Subtle gold glow */
+}
+
+.footer {
+    padding: 30px 20px;      /* Reduces the 'huge' feeling of the footer */
+    background: #000;
+    text-align: center;
+    border-top: 1px solid #BF953F;
+}
+</style>
+</head>
+<body>
+
+    <!-- This is the "Socket" where your other pages plug in -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- LUXURY FOOTER IN BASE.HTML -->
+<footer class="footer">
+    <!-- Ensure {% load static %} is at the very top of your base.html -->
+    <img src="{% static 'showroom/images/logo.png' %}" alt="Sarkin Mota Autos" class="footer-logo">
+    
+    <p class="footer-gold">Sarkin Mota Autos</p>
+    <p class="footer-tagline">LUXURY & PERFORMANCE</p>
+    <div class="footer-info">
+        <p>Plot 108B off Muhammadu Buhari way, CBD, Abuja</p>
+        <p>alaminsarkinmota@gmail.com</p>
+        <a href="https://instagram.com/sarkin_mota" class="footer-link">Instagram</a>
+        <p class="copyright">© 2026 Sarkin Mota Autos. All Rights Reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

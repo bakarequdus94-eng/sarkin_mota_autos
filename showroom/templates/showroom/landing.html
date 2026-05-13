@@ -1,0 +1,122 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarkin Mota Autos | Entrance</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #000; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            overflow: hidden; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Container for the text to ensure it stays together */
+        .brand-header {
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            z-index: 2;
+        }
+
+        .gold-text {
+            color: #FFD700;
+            font-size: 3.5rem;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .sub-text {
+            color: #ffffff;
+            letter-spacing: 5px;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        /* THE MOVING CAR CONTAINER */
+        .car-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px 0;
+            opacity: 0;
+            /* Starts slightly off to the left */
+            transform: translateX(-50px); 
+            animation: driveIn 1.2s ease-out 0.8s forwards;
+            z-index: 1;
+        }
+
+        .car-container img {
+            width: 100%;
+            height: auto;
+            /* Adds luxury glow beneath the car */
+            filter: drop-shadow(0 15px 35px rgba(255, 215, 0, 0.25));
+        }
+
+        .enter-btn {
+            padding: 16px 55px;
+            background: transparent;
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            transition: 0.5s all;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.8s forwards;
+            cursor: pointer;
+        }
+
+        .enter-btn:hover {
+            background: #FFD700;
+            color: #000;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn { 
+            to { opacity: 1; } 
+        }
+        
+        @keyframes driveIn { 
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            } 
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .gold-text { font-size: 2.2rem; letter-spacing: 5px; }
+            .car-container { max-width: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="brand-header">
+        <h1 class="gold-text">Sarkin Mota</h1>
+        <p class="sub-text">Premium Auto Dealership</p>
+    </div>
+
+    <div class="car-container">
+        <img src="{% static 'showroom/images/landing_car.png' %}" alt="Luxury Vehicle">
+    </div>
+
+    <a href="{% url 'car_list' %}" class="enter-btn">Enter Showroom</a>
+
+</body>
+</html>
