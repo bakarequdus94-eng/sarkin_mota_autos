@@ -29,10 +29,12 @@ INSTALLED_APPS = [
     'cloudinary',
     "showroom",
 ]
+import os
+
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': "dcrqxoh29",
-    'API_KEY': "335587852872787",
-    'API_SECRET': "SvKevc1z8FJ4Zmpi3cIfcnXEeB0",
+    'CLOUD_NAME': os.environ.get("dcrqxoh29"),
+    'API_KEY': os.environ.get("335587852872787"),
+    'API_SECRET': os.environ.get("SvKevc1z8FJ4Zmpi3cIfcnXEeB0"),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
