@@ -3,6 +3,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from pathlib import Path
+import cloudinary_storage
 import dj_database_url # For the Render database
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,14 +95,10 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Force Cloudinary for Media
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
     'API_KEY': "251838683361349",
     'API_SECRET': "vWVr2yHFbii5ESAGjibineIFSdI",
-    'FORMAT': 'png',
 }
 
-# Ensure MEDIA_URL is absolute for Cloudinary
-MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
