@@ -91,9 +91,6 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # For serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
     'API_KEY': '335587852872787',
