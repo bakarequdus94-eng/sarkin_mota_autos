@@ -18,5 +18,5 @@ class CarVideo(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='videos')
     video = models.FileField(upload_to='cars/videos/')
     
-    def __str__(self): # Fixed from __cl__
+    def __str__(self): # Fixed from __clstr_
         return f"Video for {self.car.name}"

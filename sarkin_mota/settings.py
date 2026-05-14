@@ -25,9 +25,17 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic", # For static files
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    'cloudinary_storage',
+    'cloudinary',
     "showroom",
 ]
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': "dcrqxoh29",
+    'API_KEY': "335587852872787",
+    'API_SECRET': "SvKevc1z8FJ4Zmpi3cIfcnXEeB0",
+}
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware", # For static files
