@@ -92,9 +92,10 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
-MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
+    'CLOUD_NAME': 'dcrqxoh29',
     'API_KEY': '335587852872787',
     'API_SECRET': 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
 }
 
+MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
