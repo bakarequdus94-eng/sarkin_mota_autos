@@ -14,8 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure-xz($m)&nbzz!_5yexy_5j
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # Add your Render URL here once you create the service
-ALLOWED_HOSTS = ['*'] # Change this to ['your-app-name.onrender.com'] later
-
+ALLOWED_HOSTS = ['sarkin-mota-autos.onrender.com', 'res.cloudinary.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
