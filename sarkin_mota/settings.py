@@ -102,11 +102,13 @@ CLOUDINARY_STORAGE = {
     'API_KEY': '335587852872787',
     'API_SECRET': 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
 }
+
 cloudinary.config(
     cloud_name = 'dcrqxoh29',
     api_key = '335587852872787',
     api_secret = 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
     secure = True
-)
+) # <--- MAKE SURE THIS PARENTHESIS IS HERE ON LINE 110
+
 # Ensure MEDIA_URL is absolute for Cloudinary
 MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
