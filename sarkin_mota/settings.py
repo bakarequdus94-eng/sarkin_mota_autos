@@ -1,4 +1,7 @@
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from pathlib import Path
 import dj_database_url # For the Render database
 
@@ -99,6 +102,11 @@ CLOUDINARY_STORAGE = {
     'API_KEY': '335587852872787',
     'API_SECRET': 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
 }
-
+cloudinary.config(
+    cloud_name = 'dcrqxoh29',
+    api_key = '335587852872787',
+    api_secret = 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
+    secure = True
+)
 # Ensure MEDIA_URL is absolute for Cloudinary
 MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
