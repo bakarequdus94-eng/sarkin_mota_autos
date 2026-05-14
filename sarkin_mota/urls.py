@@ -12,5 +12,6 @@ urlpatterns = [
 ]
 
 # This ensures your car photos actually appear on the screen
-if settings.DEBUG:
+# ONLY serve media locally if we aren't using Cloudinary
+if settings.DEBUG and not os.environ.get('CLOUDINARY_STORAGE'):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
