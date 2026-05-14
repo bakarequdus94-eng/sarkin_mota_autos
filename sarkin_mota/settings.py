@@ -92,13 +92,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Force Cloudinary for Media
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-else:
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
     'API_KEY': '335587852872787',
     'API_SECRET': 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
 }
+
+# Ensure MEDIA_URL is absolute for Cloudinary
+MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
