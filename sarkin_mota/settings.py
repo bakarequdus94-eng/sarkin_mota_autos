@@ -98,14 +98,14 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
-    'API_KEY': "335587852872787",
-    'API_SECRET': "SvKevc1z8FJ4Zmpi3cIfcnXEeB0",
+    'API_KEY': "251838683361349",
+    'API_SECRET': "vWVr2yHFbii5ESAGjibineIFSdI",
 }
 
 cloudinary.config(
     cloud_name = 'dcrqxoh29',
-    api_key = "335587852872787",
-    api_secret = "SvKevc1z8FJ4Zmpi3cIfcnXEeB0",
+    api_key = "251838683361349",
+    api_secret = "vWVr2yHFbii5ESAGjibineIFSdI",
     secure = True
 ) # <--- MAKE SURE THIS PARENTHESIS IS HERE ON LINE 110
 
