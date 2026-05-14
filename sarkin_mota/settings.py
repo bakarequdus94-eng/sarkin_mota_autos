@@ -91,7 +91,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # For serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Force Cloudinary for Media
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 MEDIA_URL = '/media/'
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
