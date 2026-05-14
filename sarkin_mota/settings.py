@@ -30,13 +30,6 @@ INSTALLED_APPS = [
     "showroom",
 ]
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dcrqxoh29',
-    'API_KEY': '335587852872787',
-    'API_SECRET': 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -101,4 +94,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dcrqxoh29',
+    'API_KEY': '335587852872787',
+    'API_SECRET': 'SvKevc1z8FJ4ZnpI3cIfcnXEeB0',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
