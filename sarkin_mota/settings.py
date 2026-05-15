@@ -1,7 +1,4 @@
 import os
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 from pathlib import Path
 import cloudinary_storage
 import dj_database_url # For the Render database
@@ -102,4 +99,3 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-MEDIA_URL = 'https://res.cloudinary.com/dcrqxoh29/'
