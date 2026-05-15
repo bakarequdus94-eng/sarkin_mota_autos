@@ -1,8 +1,11 @@
+from decouple import config
 import os
 from pathlib import Path
 import cloudinary_storage
 import dj_database_url # For the Render database
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY: Use an environment variable for the secret key on Render
@@ -18,6 +21,7 @@ ALLOWED_HOSTS = ['sarkin-mota-autos.onrender.com', 'res.cloudinary.com', 'localh
 
 INSTALLED_APPS = [
     'cloudinary_storage',
+    "django.contrib.staticfiles",
     'cloudinary',
     "django.contrib.admin",
     "django.contrib.auth",
@@ -25,7 +29,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "whitenoise.runserver_nostatic", # For static files
-    "django.contrib.staticfiles",
     "django.contrib.humanize",
     "showroom",
 ]
@@ -91,11 +94,16 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # For serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Force Cloudinary for Media
+# --- CLEAN RESET START ---
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-manual-backup-key-123')
+DEBUG = config('DEBUG', default=True, cast=bool)
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
-    'API_KEY': "251838683361349",
-    'API_SECRET': "vWVr2yHFbii5ESAGjibineIFSdI",
+    'API_KEY': '251838683361349',
+    'API_SECRET': 'vWVr2yHFbii5ESAGjibineIFSdI',
 }
 
+MEDIA_URL = '/media/' 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
