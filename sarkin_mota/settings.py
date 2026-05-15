@@ -15,8 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure-xz($m)&nbzz!_5yexy_5j
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # Add your Render URL here once you create the service
-ALLOWED_HOSTS = ['sarkin-mota-autos.onrender.com', 'res.cloudinary.com', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,12 +97,21 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-manual-backup-key-123')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
+import cloudinary
+
+# 1. Direct configuration for CloudinaryField
+cloudinary.config( 
+  cloud_name = "dcrqxoh29", 
+  api_key = "251838683361349", 
+  api_secret = "vWVr2yHFbii5ESAGjibineIFSdI",
+  secure = True
+)
+
+# 2. Keep this for the storage engine
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcrqxoh29',
     'API_KEY': '251838683361349',
     'API_SECRET': 'vWVr2yHFbii5ESAGjibineIFSdI',
 }
 
-MEDIA_URL = '/media/' 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

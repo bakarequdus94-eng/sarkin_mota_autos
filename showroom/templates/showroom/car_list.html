@@ -175,7 +175,7 @@
     {% for car in page_obj %}
         <div class="car-card">
             <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit;">
-                <img src="{{ car.image.url }}" class="car-card-img" alt="{{ car.name }}">
+            <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-img">
                 <div class="car-card-info">
                     <span class="brand-label">{{ car.brand }}</span>
                     <h3 class="car-name">{{ car.name }}</h3>

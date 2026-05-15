@@ -1,18 +1,22 @@
 from django.contrib import admin
-from .models import Car, CarImage, CarVideo # Changed to CarImage
+from .models import Car, CarImage, CarVideo
 
-class ExtraPhotoInline(admin.TabularInline):
-    model = CarImage # Changed to CarImage
-    extra = 1
+# This allows you to add photos directly inside the Car page
+class CarImageInline(admin.TabularInline):
+    model = CarImage
+    extra = 1  # This gives you one empty slot to start with
 
+# This allows you to add videos directly inside the Car page
 class CarVideoInline(admin.TabularInline):
     model = CarVideo
     extra = 1
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    inlines = [ExtraPhotoInline, CarVideoInline]
-    list_display = ('name', 'brand', 'price')
+    list_display = ('brand', 'name', 'price') # Shows these columns in the main list
+    inlines = [CarImageInline, CarVideoInline] # Hooks up the gallery and video slots
 
-admin.site.register(CarImage) # Changed to CarImage
+# Optionally register these if you want to edit them separately, 
+# but the Inlines above are usually enough!
+admin.site.register(CarImage)
 admin.site.register(CarVideo)

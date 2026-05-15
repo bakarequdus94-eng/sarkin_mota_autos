@@ -76,7 +76,9 @@ pure_eval==0.2.3
 pycparser==3.0
 Pygments==2.19.2
 python-dateutil==2.9.0.post0
+python-decouple==3.8
 python-json-logger==4.0.0
+python-magic==0.4.27
 PyYAML==6.0.3
 pyzmq==27.1.0
 referencing==0.37.0
