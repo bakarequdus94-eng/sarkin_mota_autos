@@ -3,9 +3,8 @@
 
 {% block content %}
     <div class="container">
-     <a href="{% url 'car_list' %}" class="btn-back">← Back to Showroom</a>  
-
         <div class="main-display">
+            <a href="#" onclick="history.back(); return false;" class="btn-back">← Back to Showroom</a>
             <div>
                 <img src="{{ car.image.url }}" class="featured-img" onclick="openModal(this.src)">
             </div>
@@ -15,7 +14,11 @@
                 <h1 style="margin: 5px 0;">{{ car.name }}</h1>
                 <span class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</span>
                 <p class="description">{{ car.description }}</p>
-                <a href="https://wa.me/2347015136111" class="wa-button">Chat with an Agent</a>
+                <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
+   class="wa-button" 
+   target="_blank">
+   Chat with an Agent
+</a>
             </div>
         </div>
 

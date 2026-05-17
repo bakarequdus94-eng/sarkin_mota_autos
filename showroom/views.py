@@ -25,6 +25,6 @@ def car_list(request):
     return render(request, 'showroom/car_list.html', {'page_obj': page_obj, 'query': query})
 
 # You will also likely need this for your car details
-def car_detail(request, car_id):
-    car = get_object_or_404(Car, id=car_id)
+def car_detail(request, pk):
+    car = get_object_or_404(Car, pk=pk)
     return render(request, 'showroom/car_detail.html', {'car': car})
