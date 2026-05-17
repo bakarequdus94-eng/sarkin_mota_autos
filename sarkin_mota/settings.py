@@ -68,7 +68,7 @@ WSGI_APPLICATION = "sarkin_mota.wsgi.application"
 # Database: Uses SQLite locally, PostgreSQL on Render
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+       default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",
         conn_max_age=600
     )
 }
