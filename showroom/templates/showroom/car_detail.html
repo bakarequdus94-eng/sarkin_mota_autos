@@ -26,7 +26,7 @@
 <h2 class="gallery-title">Additional Photos & Videos</h2>
     <div class="slider-wrapper">
         <div class="slider" id="carSlider"> 
-            {% for extra in car.additional_images.all %}
+            {% for extra in car.images.all %}
                 <div class="slide">
                     <img src="{{ extra.image.url }}" alt="View" onclick="openModal('{{ extra.image.url }}')">
                 </div>
