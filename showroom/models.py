@@ -21,8 +21,8 @@ class CarImage(models.Model):
         return f"Image for {self.car.brand} {self.car.name}"
         # Add this below your CarImage class
 class CarVideo(models.Model):
-    car = models.ForeignKey(Car, default=None, on_delete=models.CASCADE, related_name='additional_videos')
-    video = CloudinaryField('video', resource_type='video') # Specifying video type
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='additional_videos')
+    video = CloudinaryField('video', resource_type='video')
 
     def __str__(self):
         return f"Video for {self.car.name}"
