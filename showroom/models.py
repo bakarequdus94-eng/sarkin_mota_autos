@@ -6,7 +6,6 @@ class Car(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=15, decimal_places=2)
     description = models.TextField()
-    video = CloudinaryField('car_videos/', blank=True, null=True, help_text="Upload an MP4 car showcase video")
     image = CloudinaryField('image') 
 
     def __str__(self):
