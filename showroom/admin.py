@@ -4,13 +4,13 @@ from .models import Car, CarImage, CarVideo
 # This allows you to add photos directly inside the Car page
 class CarImageInline(admin.TabularInline):
     model = CarImage
-    extra = 1  # This gives you one empty slot to start with
-
+    extra = 7 # This gives you one empty slot to start with
+    max_num = 7
 # This allows you to add videos directly inside the Car page
 class CarVideoInline(admin.TabularInline):
     model = CarVideo
-    extra = 1
-
+    extra = 3
+    max_num = 3
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
     list_display = ('brand', 'name', 'price') # Shows these columns in the main list
