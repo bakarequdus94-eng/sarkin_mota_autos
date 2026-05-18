@@ -15,7 +15,8 @@ class CarVideoInline(admin.TabularInline):
 class CarAdmin(admin.ModelAdmin):
     list_display = ('brand', 'name', 'price') # Shows these columns in the main list
     inlines = [CarImageInline, CarVideoInline] # Hooks up the gallery and video slots
-
+class Media:
+        js = ('showroom/js/admin_drag_drop.js',)
 # Optionally register these if you want to edit them separately, 
 # but the Inlines above are usually enough!
 admin.site.register(CarImage)
