@@ -17,7 +17,18 @@
             <h1 class="car-headline">{{ car.name }}</h1>
             <span class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</span>
             <p class="description">{{ car.description }}</p>
-            
+            <div class="vehicle-overview" style="background: #111; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3 style="color: #fff; border-bottom: 1px solid #222; padding-bottom: 10px;">Vehicle Specifications</h3>
+    
+    <div class="specs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; color: #ccc;">
+        <div><strong>Year:</strong> <span style="color: #fff; float: right;">{{ car.year }}</span></div>
+        <div><strong>Mileage:</strong> <span style="color: #fff; float: right;">{{ car.mileage|intcomma }} km</span></div>
+        <div><strong>Condition:</strong> <span style="color: #fff; float: right;">{{ car.condition }}</span></div>
+        <div><strong>Transmission:</strong> <span style="color: #fff; float: right;">{{ car.transmission|default:"Automatic" }}</span></div>
+        <div><strong>Fuel Type:</strong> <span style="color: #fff; float: right;">{{ car.fuel_type|default:"Petrol" }}</span></div>
+        <div><strong>Body Type:</strong> <span style="color: #fff; float: right;">{{ car.body_type|default:"SUV" }}</span></div>
+    </div>
+</div>
             <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
                class="wa-button" 
                target="_blank">

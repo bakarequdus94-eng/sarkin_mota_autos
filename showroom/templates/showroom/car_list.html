@@ -2,6 +2,23 @@
 {% load humanize %}
 
 {% block content %}
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+
+    <div class="filter-wrapper" style="background: #111; border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+        </div>
+
+    <div class="car-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;">
+        {% for car in page_obj %}
+            <div class="car-card" style="background: #0d0d0d; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative;">
+                </div>
+        {% empty %}
+            <p style="color: #666; text-align: center; grid-column: 1/-1;">No vehicles currently match your filters in the showroom.</p>
+        {% endfor %}
+    </div>
+
+</div> {% endblock %}
+
 <style>
     .header h1 {
         font-size: 3rem;
@@ -285,11 +302,28 @@
                     </div>
                     
                     <div class="car-card-info">
-                        <span class="brand-label">{{ car.brand }}</span>
-                        <h3 class="car-name">{{ car.name }}</h3>
-                        <p class="short-description">{{ car.description|truncatewords:15 }}</p>
-                        <p class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</p>
-                    </div>
+    <span class="brand-label">{{ car.brand }}</span>
+    <h3 class="car-name">{{ car.name }} ({{ car.year }})</h3>
+    
+    <div class="car-specs-row" style="display: flex; gap: 15px; margin: 10px 0; font-size: 0.85rem; color: #aaa;">
+        <span class="spec-item">
+            <i class="fas fa-road"></i> {{ car.mileage|intcomma }} km
+        </span>
+        <span class="spec-item">
+            <i class="fas fa-car-side"></i> {{ car.condition }}
+        </span>
+        {% if car.transmission %}
+        <span class="spec-item">
+            <i class="fas fa-cog"></i> {{ car.transmission }}
+        </span>
+        {% endif %}
+    </div>
+
+    <div class="car-card-bottom">
+        <span class="car-price">₦{{ car.price|intcomma }}</span>
+        <a href="{% url 'car_detail' car.id %}" class="btn-view">View Details</a>
+    </div>
+</div>
                 </a>
             </div>
         {% empty %}
