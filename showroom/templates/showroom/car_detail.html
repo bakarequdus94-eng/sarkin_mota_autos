@@ -2,80 +2,90 @@
 {% load humanize %}
 
 {% block content %}
-    <div class="container">
-        <div class="main-display">
+<div class="container">
+    <!-- MAIN PRODUCT CORNER -->
+    <div class="main-display">
+        <div class="media-column">
             <a href="#" onclick="history.back(); return false;" class="btn-back">← Back to Showroom</a>
-            <div>
-                <img src="{{ car.image.url }}" class="featured-img" onclick="openModal(this.src)">
-            </div>
-
-            <div class="car-info-box">
-                <span style="color: #888; text-transform: uppercase;">{{ car.brand }}</span>
-                <h1 style="margin: 5px 0;">{{ car.name }}</h1>
-                <span class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</span>
-                <p class="description">{{ car.description }}</p>
-                <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
-   class="wa-button" 
-   target="_blank">
-   Chat with an Agent
-</a>
+            <div class="featured-img-frame">
+                <img src="{{ car.image.url }}" class="featured-img" onclick="openModal(this.src)" alt="{{ car.name }}">
             </div>
         </div>
-<hr style="border-color: #222; margin: 40px 0;">
 
-<!-- REVIEWS DISPLAY SECTION -->
-<div class="reviews-section" style="margin-top: 30px;">
-    <h3 style="color: #FFD700; margin-bottom: 20px;">User Reviews & Ratings (★ {{ car.average_rating }})</h3>
-    
-    {% for review in car.reviews.all %}
-        <div class="review-card" style="background: #111; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #FFD700;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <strong style="color: #fff;">{{ review.name }}</strong>
-                <span style="color: #FFD700;">{{ review.rating }} / 5 ★</span>
-            </div>
-            <p style="color: #aaa; margin: 0;">{{ review.comment }}</p>
-            <small style="color: #555; font-size: 11px;">Posted on {{ review.created_at|date:"F d, Y" }}</small>
+        <div class="car-info-box">
+            <span class="brand-label">{{ car.brand }}</span>
+            <h1 class="car-headline">{{ car.name }}</h1>
+            <span class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</span>
+            <p class="description">{{ car.description }}</p>
+            
+            <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
+               class="wa-button" 
+               target="_blank">
+               Chat with an Agent
+            </a>
         </div>
-    {% empty %}
-        <p style="color: #666;">No reviews yet for this vehicle. Be the first to leave a rating!</p>
-    {% endfor %}
-</div>
+    </div>
 
-<!-- LEAVE A REVIEW FORM -->
-<div class="add-review-form" style="background: #0a0a0a; padding: 25px; border-radius: 8px; margin-top: 40px; border: 1px dashed #333;">
-    <h4 style="color: #fff; margin-bottom: 15px;">Submit an Inspection Rating</h4>
-    <form method="POST" action="{% url 'add_review' car.id %}">
-        {% csrf_token %}
-        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-            <input type="text" name="name" placeholder="Your Name" required style="flex: 1; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px;">
-            <input type="email" name="email" placeholder="Your Email" style="flex: 1; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px;">
-        </div>
+    <hr style="border-color: #222; margin: 40px 0;">
+
+    <!-- REVIEWS DISPLAY SECTION -->
+    <div class="reviews-section" style="margin-top: 30px;">
+        <h3 style="color: #FFD700; margin-bottom: 20px;">User Reviews & Ratings</h3>
         
-        <div style="margin-bottom: 15px;">
-            <label style="color: #FFD700; display: block; margin-bottom: 5px;">Score Rating:</label>
-            <select name="rating" required style="padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; width: 120px;">
-                <option value="5">5 Stars ★★★★★</option>
-                <option value="4">4 Stars ★★★★</option>
-                <option value="3">3 Stars ★★★</option>
-                <option value="2">2 Stars ★★</option>
-                <option value="1">1 Star ★</option>
-            </select>
-        </div>
+        {% if car.reviews.all %}
+            {% for review in car.reviews.all %}
+                <div class="review-card" style="background: #111; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #FFD700;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="color: #fff;">{{ review.name }}</strong>
+                        <span style="color: #FFD700;">{{ review.rating }} / 5 ★</span>
+                    </div>
+                    <p style="color: #aaa; margin: 0;">{{ review.comment }}</p>
+                    <small style="color: #555; font-size: 11px;">Posted on {{ review.created_at|date:"F d, Y" }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #666;">No inspection reviews yet for this vehicle. Be the first to leave feedback!</p>
+        {% endif %}
+    </div>
 
-        <div style="margin-bottom: 15px;">
-            <textarea name="comment" placeholder="Write your feedback here..." rows="4" style="width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; resize: none;"></textarea>
-        </div>
+    <!-- LEAVE A REVIEW FORM -->
+    <div class="add-review-form" style="background: #0a0a0a; padding: 25px; border-radius: 8px; margin-top: 40px; border: 1px dashed #333;">
+        <h4 style="color: #fff; margin-bottom: 15px;">Submit an Inspection Rating</h4>
+        
+        <!-- Action target uses dot fallback if your namespace configuration varies -->
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                <input type="text" name="name" placeholder="Your Name" required style="flex: 1; min-width: 200px; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px;">
+                <input type="email" name="email" placeholder="Your Email (Optional)" style="flex: 1; min-width: 200px; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px;">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Score Rating:</label>
+                <select name="rating" required style="padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; width: 150px;">
+                    <option value="5">5 Stars ★★★★★</option>
+                    <option value="4">4 Stars ★★★★</option>
+                    <option value="3">3 Stars ★★★</option>
+                    <option value="2">2 Stars ★★</option>
+                    <option value="1">1 Star ★</option>
+                </select>
+            </div>
 
-        <button type="submit" style="padding: 10px 25px; background: #FFD700; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer;">Submit Review</button>
-    </form>
-</div>
-      
-<h2 class="gallery-title">Additional Photos & Videos</h2>
+            <div style="margin-bottom: 15px;">
+                <textarea name="comment" placeholder="Write your inspection feedback or inquiry details here..." rows="4" required style="width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; resize: none; box-sizing: border-box;"></textarea>
+            </div>
+
+            <button type="submit" style="padding: 12px 30px; background: #FFD700; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">Submit Review</button>
+        </form>
+    </div>
+          
+    <!-- MEDIA CAROUSEL GALLERY -->
+    <h2 class="gallery-title">Additional Photos & Videos</h2>
     <div class="slider-wrapper">
         <div class="slider" id="carSlider"> 
             {% for extra in car.images.all %}
                 <div class="slide">
-                    <img src="{{ extra.image.url }}" alt="View" onclick="openModal('{{ extra.image.url }}')">
+                    <img src="{{ extra.image.url }}" alt="View Room" onclick="openModal('{{ extra.image.url }}')">
                 </div>
             {% endfor %}
 
@@ -89,19 +99,22 @@
         </div>
     </div>
 
-    {% if not car.additional_images.all and not car.additional_videos.all %}
-        <p style="color: #555; padding: 20px;">New gallery content coming soon.</p>
+    {% if not car.images.all and not car.additional_videos.all %}
+        <p style="color: #555; text-align: center; padding: 30px; font-style: italic;">New showroom media modules rolling out shortly.</p>
     {% endif %}
-</div> <div id="imageModal" onclick="closeModal()">
+</div> 
+
+<!-- FULLSCREEN LIGHTBOX FRAME -->
+<div id="imageModal" onclick="closeModal()">
     <div class="modal-close" onclick="closeModal()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#BF953F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-</div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#BF953F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </div>
     <div class="modal-content-wrapper" onclick="event.stopPropagation()">
-        <img id="modalImg" style="display:none;">
-        </div>
+        <img id="modalImg" style="display:none;" alt="Enlarged view">
+    </div>
     <p class="modal-footer-text">Sarkin Mota | Premium Luxury Car</p>
 </div>
 
@@ -132,7 +145,7 @@
     }
 
     function closeModal(event) {
-        if (event) event.stopPropagation(); // Prevents double-triggering
+        if (event) event.stopPropagation();
         const modal = document.getElementById('imageModal');
         modal.style.display = "none";
         const oldVideo = document.getElementById('modalVideo');
@@ -142,49 +155,8 @@
         }
     }
 </script>
+
 <style>
-    
-/* ... keep your other styles ... */
-
-.modal-close {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    width: 45px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(191, 149, 63, 0.4);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10001;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-}
-
-.modal-close svg {
-    width: 22px;
-    height: 22px;
-    filter: drop-shadow(0 0 5px rgba(191, 149, 63, 0.5));
-}
-
-.modal-close:hover, .modal-close:active {
-    background: rgba(191, 149, 63, 0.2);
-    transform: rotate(90deg) scale(1.1);
-    border-color: #BF953F;
-}
-
-/* Make sure the modal-footer-text doesn't overlap */
-.modal-footer-text {
-    bottom: 30px;
-    font-size: 0.65rem;
-    letter-spacing: 4px;
-    border: 1px solid rgba(191, 149, 63, 0.3);
-}
-
-/* Root Colors & Font */
 :root {
     --gold: #BF953F;
     --dark-bg: #0a0a0a;
@@ -202,77 +174,101 @@ body {
 
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-/* Typography */
+.btn-back {
+    display: inline-block;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    transition: color 0.2s ease;
+}
+.btn-back:hover { color: #fff; }
+
+/* Desktop side-by-side grid upgrade */
+.main-display { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 30px; 
+    align-items: start;
+}
+
+@media (min-width: 850px) {
+    .main-display { 
+        grid-template-columns: 1.2fr 1fr; 
+    }
+}
+
+.featured-img-frame { width: 100%; }
+.featured-img { 
+    width: 100%; 
+    height: auto;
+    border-radius: 15px; 
+    border: 1px solid var(--border); 
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.car-info-box { 
+    padding: 30px; 
+    background: var(--card-bg); 
+    border-radius: 15px; 
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+}
+
+.brand-label { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; display: block; }
+.car-headline { margin: 8px 0; font-size: 2.2rem; font-weight: 700; color: #fff; }
+
+.price-tag { 
+    display: block; 
+    font-size: 2rem; 
+    color: var(--gold); 
+    font-weight: 800; 
+    margin: 15px 0; 
+}
+
+.description { color: #ccc; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; }
+
 .gallery-title { 
     color: var(--gold); 
     text-transform: uppercase; 
     letter-spacing: 3px; 
-    font-size: 0.9rem; 
-    margin: 40px 0 20px; 
+    font-size: 1rem; 
+    margin: 50px 0 20px; 
     text-align: center;
 }
 
-/* Main Display - The Showpiece */
-.main-display { display: grid; grid-template-columns: 1fr; gap: 25px; margin-top: 10px; }
-.featured-img { 
-    width: 100%; 
-    border-radius: 20px; 
-    border: 1px solid var(--border); 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.car-info-box { 
-    padding: 25px; 
-    background: var(--card-bg); 
-    border-radius: 20px; 
-    border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
-}
-
-.brand-label { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; }
-.price-tag { 
-    display: block; 
-    font-size: 1.8rem; 
-    color: var(--gold); 
-    font-weight: 800; 
-    margin: 10px 0; 
-}
-
-.description { color: #ccc; font-size: 0.95rem; line-height: 1.7; }
-
-/* The Professional Slider */
+/* Horizontal slider container adjustments */
 .slider-wrapper { 
     width: 100%; 
     overflow-x: auto; 
     scroll-snap-type: x mandatory; 
-    scrollbar-width: none; /* Firefox */
-    padding-bottom: 10px;
+    scrollbar-width: none;
+    padding-bottom: 15px;
 }
-.slider-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+.slider-wrapper::-webkit-scrollbar { display: none; }
 
 .slider { display: flex; gap: 15px; }
 
 .slide { 
-    flex: 0 0 85%; 
-    height: 250px; 
-    scroll-snap-align: center; 
-    border-radius: 15px; 
+    flex: 0 0 290px; 
+    height: 190px; 
+    scroll-snap-align: start; 
+    border-radius: 10px; 
     overflow: hidden; 
     border: 1px solid var(--border); 
     background: #000;
-    transition: transform 0.3s ease;
 }
+.slide img, .slide video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
-.slide:active { transform: scale(0.98); }
-.slide img, .slide video { width: 100%; height: 100%; object-fit: cover; }
-
-/* Modal - The High-End Popup */
+/* Lightbox overlay styling modules */
 #imageModal {
     display: none; 
     position: fixed; 
     z-index: 9999; 
     top: 0; left: 0; 
-    width: 100%; height: 100%;
+    width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.98); 
     backdrop-filter: blur(15px); 
     align-items: center; 
@@ -288,35 +284,60 @@ body {
 }
 
 #modalImg, #modalVideo { 
-    width: 100vw; 
+    width: 100%; 
+    max-width: 90%;
     max-height: 75vh; 
     object-fit: contain; 
     border-top: 1px solid var(--gold); 
     border-bottom: 1px solid var(--gold);
-    box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
+    box-shadow: 0 0 25px rgba(191, 149, 63, 0.25);
 }
 
-/* WhatsApp Button - Conversion King */
+.modal-close {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(191, 149, 63, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10001;
+    transition: all 0.2s ease;
+}
+.modal-close:hover {
+    background: rgba(191, 149, 63, 0.2);
+    transform: scale(1.05);
+}
+.modal-close svg { width: 20px; height: 20px; }
+
+.modal-footer-text {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #555;
+    text-transform: uppercase;
+}
+
 .wa-button {
     background: linear-gradient(135deg, #25D366, #128C7E);
     color: white !important; 
-    padding: 15px 30px; 
-    border-radius: 50px;
+    padding: 14px 24px; 
+    border-radius: 8px;
     text-decoration: none; 
     display: block; 
     text-align: center;
-    font-weight: bold; 
-    margin-top: 25px;
-    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
+    transition: transform 0.2s ease;
 }
-
-/* Footer */
-.footer { 
-    background: #000; 
-    padding: 60px 20px; 
-    text-align: center; 
-    border-top: 1px solid var(--gold); 
-    margin-top: 80px; 
-}
+.wa-button:hover { transform: translateY(-2px); }
 </style>
 {% endblock %}
