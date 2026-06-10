@@ -6,23 +6,16 @@ from django.db import connection
 from django.http import HttpResponse
 
 def landing_page(request):
-    # This script reads directly from PostgreSQL's hidden internal tracking table
     try:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT app, name, applied FROM django_migrations WHERE app='showroom';")
-            rows = cursor.fetchall()
-        
-        # Format the database output into text we can read on the screen
-        output = "<h3>Live Render Database Migration Status:</h3><br>"
-        if not rows:
-            output += "❌ No migrations have ever been applied to the 'showroom' app inside this database!"
-        for row in rows:
-            output += f"🔹 App: <b>{row[0]}</b> | Migration: <b>{row[1]}</b> | Applied on: <i>{row[2]}</i><br>"
-        
-        return HttpResponse(output)
+            # This force-injects the missing created_at column directly into PostgreSQL
+            cursor.execute('''
+                ALTER TABLE showroom_car 
+                ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+            ''')
+        return HttpResponse("✅ SUCCESS! The created_at column was successfully injected into the database table. You can remove this script now.")
     except Exception as e:
-        return HttpResponse(f"Database connection error: {e}")
-
+        return HttpResponse(f"❌ SQL Execution Error: {e}")
 
 def car_list(request):
     cars = Car.objects.all().order_by('-id')  # Ordered by newest first
