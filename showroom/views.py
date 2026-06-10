@@ -14,7 +14,7 @@ from django.http import HttpResponse
                 ADD COLUMN IF NOT EXISTS condition VARCHAR(100) DEFAULT 'Foreign Used';
             ''')
             
-            # 2. Force inject color (Just in case it's in your model)
+            # 2. Force inject color
             cursor.execute('''
                 ALTER TABLE showroom_car 
                 ADD COLUMN IF NOT EXISTS color VARCHAR(50) DEFAULT 'Black';
@@ -35,7 +35,6 @@ from django.http import HttpResponse
         return HttpResponse("✅ SUCCESS! Condition, color, body type, and status columns have been injected. Let's load the car!")
     except Exception as e:
         return HttpResponse(f"❌ SQL Execution Error: {e}")
-
 def car_list(request):
     cars = Car.objects.all().order_by('-id')  # Ordered by newest first
 
