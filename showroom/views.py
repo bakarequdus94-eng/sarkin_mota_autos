@@ -4,35 +4,35 @@ from django.shortcuts import render, get_object_or_404, redirect  # Added redire
 from .models import Car, Review  # Cleaned up duplicate imports
 from django.db import connection
 from django.http import HttpResponse
-
-def landing_page(request):
+ 
+ def landing_page(request):
     try:
         with connection.cursor() as cursor:
-            # 1. Force inject mileage (Integer or CharField - using Integer/Numeric safe default)
+            # 1. Force inject the missing condition field (Text/CharField)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS mileage INTEGER DEFAULT 0;
+                ADD COLUMN IF NOT EXISTS condition VARCHAR(100) DEFAULT 'Foreign Used';
             ''')
             
-            # 2. Force inject transmission (Common car spec text field)
+            # 2. Force inject color (Just in case it's in your model)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS transmission VARCHAR(50) DEFAULT 'Automatic';
+                ADD COLUMN IF NOT EXISTS color VARCHAR(50) DEFAULT 'Black';
             ''')
             
-            # 3. Force inject fuel_type (Common car spec text field)
+            # 3. Force inject body_type (e.g., Sedan, SUV)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS fuel_type VARCHAR(50) DEFAULT 'Petrol';
+                ADD COLUMN IF NOT EXISTS body_type VARCHAR(50) DEFAULT 'SUV';
             ''')
             
-            # 4. Force inject engine_size (Common car spec text field)
+            # 4. Force inject availability status (Boolean toggle)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS engine_size VARCHAR(50) DEFAULT 'V6';
+                ADD COLUMN IF NOT EXISTS is_available BOOLEAN DEFAULT TRUE;
             ''')
 
-        return HttpResponse("✅ SUCCESS! The mileage and premium car spec columns have been safely injected. Check the car edit page now!")
+        return HttpResponse("✅ SUCCESS! Condition, color, body type, and status columns have been injected. Let's load the car!")
     except Exception as e:
         return HttpResponse(f"❌ SQL Execution Error: {e}")
 
