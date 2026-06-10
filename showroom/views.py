@@ -8,12 +8,25 @@ from django.http import HttpResponse
 def landing_page(request):
     try:
         with connection.cursor() as cursor:
-            # This force-injects the missing created_at column directly into PostgreSQL
+            # 1. Force inject created_at if it's missing anywhere else
             cursor.execute('''
                 ALTER TABLE showroom_car 
                 ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
             ''')
-        return HttpResponse("✅ SUCCESS! The created_at column was successfully injected into the database table. You can remove this script now.")
+            
+            # 2. Force inject the missing 'year' column (Integer field)
+            cursor.execute('''
+                ALTER TABLE showroom_car 
+                ADD COLUMN IF NOT EXISTS year INTEGER DEFAULT 2020;
+            ''')
+            
+            # 3. Just in case you added an 'updated_at' field recently too:
+            cursor.execute('''
+                ALTER TABLE showroom_car 
+                ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+            ''')
+
+        return HttpResponse("✅ SUCCESS! The year and tracking columns have been forced into the database. Check the admin panel now!")
     except Exception as e:
         return HttpResponse(f"❌ SQL Execution Error: {e}")
 
