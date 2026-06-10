@@ -10,31 +10,31 @@ class Car(models.Model):
     price = models.DecimalField(max_digits=15, decimal_places=2)
     description = models.TextField()
     image = CloudinaryField('image') 
-    created_at = models.DateTimeField(auto_now_add=True) # Automatically grabs the exact date/time it was created
-    year = models.PositiveIntegerField(default=2026)
-    mileage = models.PositiveIntegerField(help_text="Mileage in kilometers (km)", default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Made these safe for existing database records with null=True, blank=True
+    year = models.PositiveIntegerField(default=2026, null=True, blank=True)
+    mileage = models.PositiveIntegerField(help_text="Mileage in kilometers (km)", default=0, null=True, blank=True)
     
     TRANSMISSION_CHOICES = [
         ('Automatic', 'Automatic'),
         ('Manual', 'Manual'),
     ]
-    transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES, default='Automatic')
+    transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES, default='Automatic', null=True, blank=True)
     
     CONDITION_CHOICES = [
         ('Brand New', 'Brand New'),
         ('Foreign Used', 'Foreign Used'),
         ('Local Used', 'Local Used'),
     ]
-    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='Foreign Used')
+    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='Foreign Used', null=True, blank=True)
+
     @property
     def is_new(self):
-        # Returns True if the car was added less than 7 days ago
         return timezone.now() - self.created_at < timedelta(days=7)
 
     @property
     def is_hot(self):
-        # A car is "Hot" if it has an average rating of 4.5 or higher and at least 3 reviews
-        # (This ties perfectly into the rating system we just built!)
         return self.average_rating >= 4.5 and self.reviews.count() >= 3
 
     @property
@@ -43,27 +43,28 @@ class Car(models.Model):
         if reviews.exists():
             total = sum([r.rating for r in reviews])
             return round(total / reviews.count(), 1)
-        return 0 # Returns 0 if there are no reviews yet
+        return 0
 
     def __str__(self):
         return f"{self.brand} {self.name}"
 
-# Your multi-image model remains perfectly streamlined
+
 class CarImage(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='images')
     image = CloudinaryField('image')
 
     def __str__(self):
         return f"Image for {self.car.brand} {self.car.name}"
-        # Add this below your CarImage class
+
+
+# Fixed indentation and layout for the video model
 class CarVideo(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='additional_videos')
     video = CloudinaryField('video', resource_type='video')
 
     def __str__(self):
-        return f"Video for {self.car.name}"
+        return f"Video for {self.car.brand} {self.car.name}"
 
-# Keep your existing Car, CarImage, and CarVideo models here...
 
 class Review(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='reviews')

@@ -1,15 +1,14 @@
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
-from .models import Car
-from .models import Car, Review
+from django.shortcuts import render, get_object_or_404, redirect  # Added redirect here
+from .models import Car, Review  # Cleaned up duplicate imports
 
-# Add this to fix the terminal error
+# Fix for the terminal error landing page
 def landing_page(request):
     return render(request, 'showroom/landing.html')
 
 def car_list(request):
-    cars = Car.objects.all()
+    cars = Car.objects.all().order_by('-id')  # Ordered by newest first
 
     # Capture GET parameters from the advanced search form
     query = request.GET.get('q', '').strip()
@@ -31,33 +30,28 @@ def car_list(request):
         try:
             cars = cars.filter(price__lte=float(max_price))
         except ValueError:
-            pass # Ignore if the user type input isn't a valid number
+            pass  # Ignore if the user type input isn't a valid number
 
+    # Pagination setup (6 cars per page)
+    paginator = Paginator(cars, 6) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Combined single context dictionary
     context = {
-        'cars': cars,
+        'page_obj': page_obj,  # Use page_obj in your template loop now!
         'query': query,
         'car_type': car_type,
         'max_price': max_price,
     }
     return render(request, 'showroom/car_list.html', context)
 
-    paginator = Paginator(cars, 10) 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    context = {
-    'page_obj': page_obj, # This keeps your loop working perfectly!
-    'query': query,
-    'car_type': car_type,
-    'max_price': max_price,
-}
-    return render(request, 'showroom/car_list.html', {'page_obj': page_obj, 'query': query})
-
-# You will also likely need this for your car details
+# View for car details page
 def car_detail(request, pk):
     car = get_object_or_404(Car, pk=pk)
     return render(request, 'showroom/car_detail.html', {'car': car})
 
+# View for submitting a customer review
 def add_review(request, car_id):
     car = get_object_or_404(Car, id=car_id)
     if request.method == "POST":
