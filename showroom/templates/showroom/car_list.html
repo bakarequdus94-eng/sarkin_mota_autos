@@ -2,233 +2,6 @@
 {% load humanize %}
 
 {% block content %}
-<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
-
-    <div class="filter-wrapper" style="background: #111; border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-        </div>
-
-    <div class="car-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;">
-        {% for car in page_obj %}
-            <div class="car-card" style="background: #0d0d0d; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative;">
-                </div>
-        {% empty %}
-            <p style="color: #666; text-align: center; grid-column: 1/-1;">No vehicles currently match your filters in the showroom.</p>
-        {% endfor %}
-    </div>
-
-</div> {% endblock %}
-
-<style>
-    .header h1 {
-        font-size: 3rem;
-        color: #FFD700; /* Gold */
-        text-transform: uppercase;
-        margin-bottom: 10px;
-        letter-spacing: 3px;
-    }
-
-    .header p {
-        color: #ffffff;
-        font-size: 1.1rem;
-        opacity: 0.9;
-    }
-
-    .showroom {
-        display: grid;
-        grid-template-columns: 1fr; 
-        gap: 30px;
-        padding: 20px;
-        max-width: 1200px;
-        margin: auto;
-    }
-
-    .brand { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
-    .price { color: #2ecc71; font-weight: bold; font-size: 1.8rem; margin: 10px 0; }
-
-    /* LAPTOP OVERRIDE: 2 or 3 columns */
-    @media (min-width: 900px) {
-        .showroom {
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        }
-    }
-    
-    .pagination {
-        text-align: center;
-        margin-top: 40px;
-        padding-bottom: 40px;
-    }
-
-    .page-link {
-        color: #BF953F; /* Gold text */
-        background: #1a1a1a;
-        padding: 8px 16px;
-        text-decoration: none;
-        border: 1px solid #333;
-        border-radius: 5px;
-        transition: 0.3s;
-        margin: 0 4px;
-    }
-
-    .page-link:hover {
-        background: #BF953F;
-        color: #000;
-    }
-
-    .current-page {
-        color: #888;
-        margin: 0 15px;
-        font-size: 0.9rem;
-    }
-    
-    .car-grid {
-        display: grid;
-        /* Forces 2 equal columns on mobile screens by default */
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 12px; /* Tighter gap so the cards fit beautifully side-by-side */
-        padding: 10px 0;
-    }
-
-    /* Tablet & Desktop Upgrade: Automatically switch to more columns on wider screens */
-    @media (min-width: 768px) {
-        .car-grid {
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 20px 0;
-        }
-    }
-
-    .car-card {
-        background: #1a1a1a; /* Dark luxury background */
-        border-radius: 15px;
-        overflow: hidden;
-        border: 1px solid #333;
-        transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-
-    .car-card:hover {
-        transform: translateY(-5px);
-        border-color: #BF953F; /* Gold border on hover */
-    }
-
-    .car-card-img {
-        width: 100%;
-        height: 150px; /* Reduces height on mobile so the grid layout stays balanced */
-        object-fit: cover;
-        display: block;
-    }
-
-    /* Desktop sizing for the image */
-    @media (min-width: 768px) {
-        .car-card-img {
-            height: 220px;
-        }
-    }
-    
-    .car-card-info {
-        padding: 15px;
-    }
-
-    .brand-label {
-        color: #888;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .car-name {
-        margin: 5px 0;
-        font-size: 1.2rem;
-        color: #fff;
-    }
-
-    .short-description {
-        color: #bbb;
-        font-size: 0.85rem;
-        margin-bottom: 10px;
-        line-height: 1.4;
-    }
-
-    .price-tag {
-        color: #BF953F;
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin: 0;
-    }
-    
-    /* Header Container Frame Setup */
-    .animated-header-container {
-        position: relative;
-        width: 100%;
-        height: 220px; /* Slightly taller for a better cinematic frame */
-        background: #000;
-        border-radius: 8px;
-        margin-bottom: 25px;
-        overflow: hidden;
-        border: 1px solid #222;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Actual Car Background Image Layer with Zoom/Pan Animation */
-    .cinematic-car-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        z-index: 1;
-        transform: scale(1);
-        animation: cinematicPan 20s ease-in-out infinite alternate;
-    }
-
-    /* Dark tint overlay layer to keep your golden text perfectly readable */
-    .header-dark-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%);
-        z-index: 2;
-    }
-
-    /* Foreground Text Content Layer */
-    .header-overlay {
-        position: relative;
-        z-index: 3;
-        text-align: center;
-    }
-
-    .showroom-title {
-        color: #FFD700; /* Luxury Gold */
-        font-size: 2.8rem;
-        font-weight: 900;
-        letter-spacing: 4px;
-        margin: 0;
-        text-transform: uppercase;
-        text-shadow: 0px 4px 15px rgba(0, 0, 0, 1);
-    }
-
-    .showroom-subtitle {
-        color: #ccc;
-        font-size: 1.1rem;
-        margin-top: 8px;
-        letter-spacing: 2px;
-        text-shadow: 0px 2px 8px rgba(0, 0, 0, 1);
-    }
-
-    /* CINEMATIC PAN & ZOOM TIMELINE */
-    @keyframes cinematicPan {
-        0% { transform: scale(1) translate(0px, 0px); }
-        50% { transform: scale(1.08) translate(-15px, -5px); }
-        100% { transform: scale(1.15) translate(10px, 5px); }
-    }
-</style>
-
 <div class="navigation-back-bar" style="margin-bottom: 15px; padding: 10px 20px;">
     <a href="{% url 'landing' %}" style="display: inline-flex; align-items: center; color: #FFD700; text-decoration: none; font-size: 14px; font-weight: 500; gap: 8px; transition: color 0.2s ease;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -253,7 +26,7 @@
         
         <div class="form-group" style="flex: 1; min-width: 200px;">
             <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Search Cars</label>
-            <input type="text" name="q" value="{{ query }}" placeholder="e.g., Ferrari, V12, AMG..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+            <input type="text" name="q" value="{{ query|default:'' }}" placeholder="e.g., Ferrari, V12, AMG..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
         </div>
 
         <div class="form-group" style="flex: 1; min-width: 150px;">
@@ -269,7 +42,7 @@
 
         <div class="form-group" style="flex: 1; min-width: 150px;">
             <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Max Budget (₦)</label>
-            <input type="number" name="max_price" value="{{ max_price }}" placeholder="Maximum price..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+            <input type="number" name="max_price" value="{{ max_price|default:'' }}" placeholder="Maximum price..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
         </div>
 
         <div class="form-group" style="display: flex; gap: 10px;">
@@ -281,56 +54,51 @@
     </form>
 </div>  
 
-<div class="showroom">
+<div class="showroom-wrapper">
     <div class="car-grid">
         {% for car in page_obj %}
             <div class="car-card">
-                <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit;">
+                <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                    
                     <div class="image-container" style="position: relative;">
                         <div class="badge-container" style="position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; gap: 5px;">
                             {% if car.is_new %}
-                                <span class="badge badge-new" style="background-color: #00E676; color: #000; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">New</span>
+                                <span class="badge badge-new" style="background-color: #00E676; color: #000; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">New</span>
                             {% endif %}
                             
                             {% if car.is_hot %}
-                                <span class="badge badge-hot" style="background-color: #FF3D00; color: #fff; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">🔥 Hot</span>
+                                <span class="badge badge-hot" style="background-color: #FF3D00; color: #fff; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">🔥 Hot</span>
                             {% endif %}
                         </div>
-
                         <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-card-img">
                     </div>
                     
                     <div class="car-card-info">
-    <span class="brand-label">{{ car.brand }}</span>
-    <h3 class="car-name">{{ car.name }} ({{ car.year }})</h3>
-    
-    <div class="car-specs-row" style="display: flex; gap: 15px; margin: 10px 0; font-size: 0.85rem; color: #aaa;">
-        <span class="spec-item">
-            <i class="fas fa-road"></i> {{ car.mileage|intcomma }} km
-        </span>
-        <span class="spec-item">
-            <i class="fas fa-car-side"></i> {{ car.condition }}
-        </span>
-        {% if car.transmission %}
-        <span class="spec-item">
-            <i class="fas fa-cog"></i> {{ car.transmission }}
-        </span>
-        {% endif %}
-    </div>
+                        <span class="brand-label">{{ car.brand }}</span>
+                        <h3 class="car-name">{{ car.name }} <span style="font-size: 0.95rem; color: #888;">({{ car.year }})</span></h3>
+                        
+                        <div class="car-specs-row">
+                            <span class="spec-item">🛣️ {{ car.mileage|intcomma }} km</span>
+                            <span class="spec-item">💎 {{ car.condition }}</span>
+                            {% if car.transmission %}
+                                <span class="spec-item">⚙️ {{ car.transmission }}</span>
+                            {% endif %}
+                        </div>
 
-    <div class="car-card-bottom">
-        <span class="car-price">₦{{ car.price|intcomma }}</span>
-        <a href="{% url 'car_detail' car.id %}" class="btn-view">View Details</a>
-    </div>
-</div>
+                        <div class="car-card-bottom">
+                            <span class="price-tag">₦{{ car.price|intcomma }}</span>
+                            <span class="btn-view">Details →</span>
+                        </div>
+                    </div>
                 </a>
             </div>
         {% empty %}
-            <p style="color: #888; text-align: center; grid-column: 1 / -1; width: 100%; padding: 40px 0;">No cars available in the showroom yet.</p>
+            <p style="color: #666; text-align: center; grid-column: 1 / -1; width: 100%; padding: 60px 0; font-style: italic;">No luxury vehicles match your selections in the showroom right now.</p>
         {% endfor %}
     </div>
 </div>
 
+{% if page_obj.has_other_pages %}
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -348,4 +116,236 @@
         {% endif %}
     </span>
 </div>
+{% endif %}
+
+<style>
+    body {
+        background: #050505;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .showroom-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Beautiful 2-column mobile configuration that updates seamlessly up to desktop width grids */
+    .car-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+        padding: 10px 0;
+    }
+
+    @media (min-width: 768px) {
+        .car-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+    }
+
+    .car-card {
+        background: #111; 
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #222;
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .car-card:hover {
+        transform: translateY(-5px);
+        border-color: #BF953F; 
+        box-shadow: 0 10px 20px rgba(191, 149, 63, 0.1);
+    }
+
+    .car-card-img {
+        width: 100%;
+        height: 130px; 
+        object-fit: cover;
+        display: block;
+    }
+
+    @media (min-width: 768px) {
+        .car-card-img {
+            height: 200px;
+        }
+    }
+    
+    .car-card-info {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand-label {
+        color: #666;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        display: block;
+    }
+
+    .car-name {
+        margin: 5px 0 10px 0;
+        font-size: 1.1rem;
+        color: #fff;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .car-specs-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; 
+        margin-bottom: 15px; 
+        font-size: 0.75rem; 
+        color: #aaa;
+        background: rgba(255,255,255,0.02);
+        padding: 6px 8px;
+        border-radius: 6px;
+    }
+    
+    .spec-item {
+        white-space: nowrap;
+    }
+
+    /* Aligns price and button side-by-side cleanly */
+    .car-card-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 5px;
+    }
+
+    .price-tag {
+        color: #BF953F;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+
+    .btn-view {
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px dashed #BF953F;
+        padding-bottom: 2px;
+        transition: color 0.2s ease;
+    }
+    .car-card:hover .btn-view {
+        color: #BF953F;
+    }
+    
+    /* Cinematic Frame Setup */
+    .animated-header-container {
+        position: relative;
+        width: calc(100% - 40px);
+        max-width: 1160px;
+        height: 180px; 
+        background: #000;
+        border-radius: 12px;
+        margin: 0 auto 25px auto;
+        overflow: hidden;
+        border: 1px solid #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        .animated-header-container { height: 240px; }
+    }
+
+    .cinematic-car-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 1;
+        animation: cinematicPan 20s ease-in-out infinite alternate;
+    }
+
+    .header-dark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
+        z-index: 2;
+    }
+
+    .header-overlay {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .showroom-title {
+        color: #FFD700; 
+        font-size: 2.2rem;
+        font-weight: 900;
+        letter-spacing: 4px;
+        margin: 0;
+        text-transform: uppercase;
+    }
+    @media (min-width: 768px) {
+        .showroom-title { font-size: 3.2rem; }
+    }
+
+    .showroom-subtitle {
+        color: #ccc;
+        font-size: 0.95rem;
+        margin-top: 8px;
+        letter-spacing: 2px;
+    }
+
+    @keyframes cinematicPan {
+        0% { transform: scale(1) translate(0px, 0px); }
+        50% { transform: scale(1.06) translate(-10px, -3px); }
+        100% { transform: scale(1.12) translate(8px, 3px); }
+    }
+    
+    /* Pagination Frame */
+    .pagination {
+        text-align: center;
+        margin: 40px 0;
+    }
+
+    .page-link {
+        color: #BF953F; 
+        background: #111;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid #222;
+        border-radius: 5px;
+        transition: 0.3s;
+        margin: 0 3px;
+        font-size: 0.9rem;
+    }
+
+    .page-link:hover {
+        background: #BF953F;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .current-page {
+        color: #666;
+        margin: 0 10px;
+        font-size: 0.9rem;
+    }
+</style>
 {% endblock %}
