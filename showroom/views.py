@@ -2,10 +2,27 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect  # Added redirect here
 from .models import Car, Review  # Cleaned up duplicate imports
+from django.db import connection
+from django.http import HttpResponse
 
-# Fix for the terminal error landing page
 def landing_page(request):
-    return render(request, 'showroom/landing.html')
+    # This script reads directly from PostgreSQL's hidden internal tracking table
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT app, name, applied FROM django_migrations WHERE app='showroom';")
+            rows = cursor.fetchall()
+        
+        # Format the database output into text we can read on the screen
+        output = "<h3>Live Render Database Migration Status:</h3><br>"
+        if not rows:
+            output += "❌ No migrations have ever been applied to the 'showroom' app inside this database!"
+        for row in rows:
+            output += f"🔹 App: <b>{row[0]}</b> | Migration: <b>{row[1]}</b> | Applied on: <i>{row[2]}</i><br>"
+        
+        return HttpResponse(output)
+    except Exception as e:
+        return HttpResponse(f"Database connection error: {e}")
+
 
 def car_list(request):
     cars = Car.objects.all().order_by('-id')  # Ordered by newest first
