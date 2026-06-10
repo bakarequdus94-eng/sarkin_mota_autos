@@ -8,25 +8,31 @@ from django.http import HttpResponse
 def landing_page(request):
     try:
         with connection.cursor() as cursor:
-            # 1. Force inject created_at if it's missing anywhere else
+            # 1. Force inject mileage (Integer or CharField - using Integer/Numeric safe default)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+                ADD COLUMN IF NOT EXISTS mileage INTEGER DEFAULT 0;
             ''')
             
-            # 2. Force inject the missing 'year' column (Integer field)
+            # 2. Force inject transmission (Common car spec text field)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS year INTEGER DEFAULT 2020;
+                ADD COLUMN IF NOT EXISTS transmission VARCHAR(50) DEFAULT 'Automatic';
             ''')
             
-            # 3. Just in case you added an 'updated_at' field recently too:
+            # 3. Force inject fuel_type (Common car spec text field)
             cursor.execute('''
                 ALTER TABLE showroom_car 
-                ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+                ADD COLUMN IF NOT EXISTS fuel_type VARCHAR(50) DEFAULT 'Petrol';
+            ''')
+            
+            # 4. Force inject engine_size (Common car spec text field)
+            cursor.execute('''
+                ALTER TABLE showroom_car 
+                ADD COLUMN IF NOT EXISTS engine_size VARCHAR(50) DEFAULT 'V6';
             ''')
 
-        return HttpResponse("✅ SUCCESS! The year and tracking columns have been forced into the database. Check the admin panel now!")
+        return HttpResponse("✅ SUCCESS! The mileage and premium car spec columns have been safely injected. Check the car edit page now!")
     except Exception as e:
         return HttpResponse(f"❌ SQL Execution Error: {e}")
 
