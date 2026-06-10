@@ -1,16 +1,16 @@
+"""
+ASGI config for sarkin_mota project.
+
+It exposes the ASGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
+"""
+
 import os
-from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sarkin_mota.settings')
+from django.core.asgi import get_asgi_application
 
-# Initialize the core application
-application = get_wsgi_application()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sarkin_mota.settings")
 
-# --- FORCE RENDER TO RUN MIGRATIONS ON STARTUP ---
-try:
-    from django.core.management import call_command
-    print("Executing dynamic database migrations on startup...")
-    call_command('migrate', interactive=False)
-    print("Database migrations applied successfully!")
-except Exception as e:
-    print(f"Startup migration bypass logged an error: {e}")
+application = get_asgi_application()
