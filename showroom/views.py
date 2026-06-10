@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect  # Added redire
 from .models import Car, Review  # Cleaned up duplicate imports
 from django.db import connection
 from django.http import HttpResponse
- 
+
  def landing_page(request):
     try:
         with connection.cursor() as cursor:
