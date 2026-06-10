@@ -19,8 +19,8 @@ ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'cloudinary_storage',
     "django.contrib.staticfiles",
+    'cloudinary_storage',
     'cloudinary',
     "django.contrib.admin",
     "django.contrib.auth",
@@ -96,15 +96,8 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-# Modern, safe WhiteNoise storage configuration for production
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-    },
-}
+## Temporary fallback to satisfy django-cloudinary-storage in Django 6.x
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # --- CLEAN RESET START ---
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-manual-backup-key-123')
 DEBUG = config('DEBUG', default=True, cast=bool)
