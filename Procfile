@@ -1,0 +1,1 @@
+web: gunicorn sarkin_mota.wsgi

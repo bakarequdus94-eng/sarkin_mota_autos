@@ -164,32 +164,172 @@
     font-size: 1.1rem;
     margin: 0;
 }
+/* Header Container Frame Setup */
+.animated-header-container {
+    position: relative;
+    width: 100%;
+    height: 220px; /* Slightly taller for a better cinematic frame */
+    background: #000;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    overflow: hidden;
+    border: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Actual Car Background Image Layer with Zoom/Pan Animation */
+.cinematic-car-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    transform: scale(1);
+    animation: cinematicPan 20s ease-in-out infinite alternate;
+}
+
+/* Dark tint overlay layer to keep your golden text perfectly readable */
+.header-dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%);
+    z-index: 2;
+}
+
+/* Foreground Text Content Layer */
+.header-overlay {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+}
+
+.showroom-title {
+    color: #FFD700; /* Luxury Gold */
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    margin: 0;
+    text-transform: uppercase;
+    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1);
+}
+
+.showroom-subtitle {
+    color: #ccc;
+    font-size: 1.1rem;
+    margin-top: 8px;
+    letter-spacing: 2px;
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 1);
+}
+
+/* CINEMATIC PAN & ZOOM TIMELINE (Ken Burns Effect) */
+@keyframes cinematicPan {
+    0% {
+        transform: scale(1) translate(0px, 0px);
+    }
+    50% {
+        transform: scale(1.08) translate(-15px, -5px);
+    }
+    100% {
+        transform: scale(1.15) translate(10px, 5px);
+    }
+}
     </style>
 </head>
 <body>
-  <div style="padding: 20px; max-width: 1200px; margin: auto;">
-    <a href="{% url 'landing' %}" style="color: #FFD700; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 1.2rem;">←</span> EXIT TO HOME
+  <!-- NAVIGATION BACK BUTTON -->
+<div class="navigation-back-bar" style="margin-bottom: 15px;">
+    <a href="{% url 'landing' %}" style="display: inline-flex; align-items: center; color: #FFD700; text-decoration: none; font-size: 14px; font-weight: 500; gap: 8px; transition: color 0.2s ease;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Home
     </a>
-</div> 
-    <div class="header">
-        <h1>Sarkin Mota Autos</h1>
-        <p>Nigeria's leading luxury auto dealership. We make owing your dream car easy with 40% initial deposit, flexible repayment plans, warranties, and premium after-sales service. More than a dealership, we are a lifestyle brand built on trust, excellence, and prestige</p>
+</div>  
+ <!-- CINEMATIC CAR SHOWROOM HEADER -->
+<div class="animated-header-container">
+    <!-- Actual car photo background layer with automatic slow movement -->
+    <div class="cinematic-car-bg" style="background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=983&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+    
+    <!-- Dark gradient tint so the text pops out cleanly -->
+    <div class="header-dark-overlay"></div>
+    
+    <div class="header-overlay">
+        <h1 class="showroom-title">SARKIN MOTA AUTOS</h1>
+        <p class="showroom-subtitle">Discover Elite Performance & Luxury</p>
     </div>
-<div class="search-container" style="max-width: 600px; margin: -30px auto 30px; padding: 0 20px; position: relative; z-index: 10;">
-    <form action="{% url 'car_list' %}" method="get" style="display: flex; gap: 10px;">
-        <input type="text" name="q" placeholder="Search for Mercedes, BMW, SUV..." 
-               style="flex: 1; padding: 15px 20px; border-radius: 50px; border: 1px solid #FFD700; background: #1a1a1a; color: white; font-size: 1rem; outline: none;">
-        <button type="submit" 
-                style="padding: 10px 25px; border-radius: 50px; border: none; background: #FFD700; color: black; font-weight: bold; cursor: pointer; transition: 0.3s;">
-            Search
-        </button>
-    </form>
 </div>
+  
    <!-- Your Car Grid -->
 <div class="car-grid">
+  <!-- ADVANCED SEARCH AND FILTER BAR -->
+<div class="search-filter-container" style="background: #111; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #222;">
+    <form method="GET" action="{% url 'car_list' %}" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;">
+        
+        <!-- Keyword Search -->
+        <div class="form-group" style="flex: 1; min-width: 200px;">
+            <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Search Cars</label>
+            <input type="text" name="q" value="{{ query }}" placeholder="e.g., Ferrari, V12, AMG..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        </div>
+
+        <!-- Car Type Filter -->
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Body Type</label>
+            <select name="car_type" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+                <option value="">All Types</option>
+                <option value="Sedan" {% if car_type == 'Sedan' %}selected{% endif %}>Sedan</option>
+                <option value="SUV" {% if car_type == 'SUV' %}selected{% endif %}>SUV</option>
+                <option value="Coupe" {% if car_type == 'Coupe' %}selected{% endif %}>Coupe</option>
+                <option value="Sports" {% if car_type == 'Sports' %}selected{% endif %}>Sports Car</option>
+            </select>
+        </div>
+
+        <!-- Max Budget Filter -->
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Max Budget (₦)</label>
+            <input type="number" name="max_price" value="{{ max_price }}" placeholder="Maximum price..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <button type="submit" style="padding: 10px 20px; background: #FFD700; color: #000; border: none; font-weight: bold; border-radius: 4px; cursor: pointer;">Filter</button>
+            {% if query or car_type or max_price %}
+                <a href="{% url 'car_list' %}" style="padding: 10px 15px; background: #333; color: #fff; text-decoration: none; border-radius: 4px; text-align: center; font-size: 14px;">Clear</a>
+            {% endif %}
+        </div>
+
+    </form>
+</div>  
     {% for car in page_obj %}
         <div class="car-card">
+            <div class="image-container" style="position: relative;">
+        
+        <!-- AUTOMATIC BADGES LAYER -->
+        <div class="badge-container" style="position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; gap: 5px;">
+            {% if car.is_new %}
+                <span class="badge badge-new" style="background-color: #00E676; color: #000; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">New</span>
+            {% endif %}
+            
+            {% if car.is_hot %}
+                <span class="badge badge-hot" style="background-color: #FF3D00; color: #fff; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">🔥 Hot</span>
+            {% endif %}
+        </div>
+
+        <!-- Your existing Car Cover Image -->
+        <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-img">
+    </div>
+    
+    <!-- Rest of your car card details (Name, Price, etc.) -->
+</div>
             <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit;">
             <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-img">
                 <div class="car-card-info">
