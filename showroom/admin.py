@@ -1,37 +1,44 @@
 from django.contrib import admin
-from .models import Car, CarImage, CarVideo
-from .models import Review
+from .models import Car, CarImage, CarVideo, Review
 
-# This allows you to add photos directly inside the Car page
+# Add multiple photos directly inside the Car admin page
 class CarImageInline(admin.TabularInline):
     model = CarImage
-    extra = 7 # This gives you one empty slot to start with
+    extra = 7 
     max_num = 7
-# This allows you to add videos directly inside the Car page
+
+# Add videos directly inside the Car admin page
 class CarVideoInline(admin.TabularInline):
     model = CarVideo
     extra = 3
     max_num = 3
+
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('brand', 'name', 'price') # Shows these columns in the main list
-    inlines = [CarImageInline, CarVideoInline] # Hooks up the gallery and video slots
-# list_display controls the columns you see when looking at the list of all cars
-    list_display = ('name', 'brand', 'price', 'year', 'transmission', 'condition')
+    # Combined single list_display config block
+    list_display = ('brand', 'name', 'price', 'year', 'transmission', 'condition')
     
-    # list_filter adds a clean filtering sidebar on the right side of the admin page
+    # Hooks up the photo gallery and video slots inside the car creation page
+    inlines = [CarImageInline, CarVideoInline] 
+    
+    # Adds a sidebar filtering layout on the right side of the admin screen
     list_filter = ('condition', 'transmission', 'year', 'brand')
     
-    # search_fields lets you quickly find cars by typing in the admin search bar
+    # Lets you search your vehicle inventory quickly
     search_fields = ('name', 'brand', 'description')
+
+    # Fixed: Correctly indented inside CarAdmin class to register your custom JS script
+    class Media:
+        js = ('showroom/js/admin_drag_drop.js',)
+
+
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('car', 'name', 'rating', 'created_at')
     list_filter = ('rating', 'created_at')
     search_fields = ('name', 'comment', 'car__name')
-class Media:
-        js = ('showroom/js/admin_drag_drop.js',)
-# Optionally register these if you want to edit them separately, 
-# but the Inlines above are usually enough!
+
+
+# Optional separate endpoints for single actions
 admin.site.register(CarImage)
 admin.site.register(CarVideo)
