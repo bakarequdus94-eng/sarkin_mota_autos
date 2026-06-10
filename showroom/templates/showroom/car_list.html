@@ -2,251 +2,218 @@
 {% load humanize %}
 
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sarkin Mota Autos</title>
-    <style>
-        .header h1 {
-    font-size: 3rem;
-    color: #FFD700; /* Gold */
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    letter-spacing: 3px;
-}
+<style>
+    .header h1 {
+        font-size: 3rem;
+        color: #FFD700; /* Gold */
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        letter-spacing: 3px;
+    }
 
-.header p {
-    color: #ffffff;
-    font-size: 1.1rem;
-    opacity: 0.9;
-}
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: white; margin: 0; }
-        .header { text-align: center; padding: 40px 20px; background: linear-gradient(to bottom, #1a1a1a, #0f0f0f); }
-        
-        /* THE GRID: Forces 1 column on mobile, changes on laptop */
+    .header p {
+        color: #ffffff;
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .showroom {
+        display: grid;
+        grid-template-columns: 1fr; 
+        gap: 30px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .brand { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+    .price { color: #2ecc71; font-weight: bold; font-size: 1.8rem; margin: 10px 0; }
+
+    /* LAPTOP OVERRIDE: 2 or 3 columns */
+    @media (min-width: 900px) {
         .showroom {
-            display: grid;
-            grid-template-columns: 1fr; 
-            gap: 30px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         }
+    }
+    
+    .pagination {
+        text-align: center;
+        margin-top: 40px;
+        padding-bottom: 40px;
+    }
 
-        .car-card {
-            background: #1e1e1e;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #333;
-            transition: 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-        }
+    .page-link {
+        color: #BF953F; /* Gold text */
+        background: #1a1a1a;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid #333;
+        border-radius: 5px;
+        transition: 0.3s;
+        margin: 0 4px;
+    }
 
-        /* LARGE IMAGES */
-        .car-card img {
-            width: 100%;
-            height: 350px; /* Big photos for mobile */
-            object-fit: cover;
-            display: block;
-        }
+    .page-link:hover {
+        background: #BF953F;
+        color: #000;
+    }
 
-        .car-info { padding: 25px; }
-        .brand { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
-        .price { color: #2ecc71; font-weight: bold; font-size: 1.8rem; margin: 10px 0; }
-
-        /* LAPTOP OVERRIDE: 2 or 3 columns */
-        @media (min-width: 900px) {
-            .showroom {
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            }
-            .car-card img {
-                height: 250px; /* Shorter height for the grid look */
-            }
-        }
-        .pagination {
-    text-align: center;
-    margin-top: 40px;
-    padding-bottom: 40px;
-}
-
-.page-link {
-    color: #BF953F; /* Gold text */
-    background: #1a1a1a;
-    padding: 8px 16px;
-    text-decoration: none;
-    border: 1px solid #333;
-    border-radius: 5px;
-    transition: 0.3s;
-    margin: 0 4px;
-}
-
-.page-link:hover {
-    background: #BF953F;
-    color: #000;
-}
-
-.current-page {
-    color: #888;
-    margin: 0 15px;
-    font-size: 0.9rem;
-}
-.car-grid {
-    display: grid;
-    /* This forces 2 equal columns on mobile screens by default */
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 12px; /* Tighter gap so the cards fit beautifully side-by-side */
-    padding: 10px 0;
-}
-
-/* Tablet & Desktop Upgrade: Automatically switch to more columns on wider screens */
-@media (min-width: 768px) {
+    .current-page {
+        color: #888;
+        margin: 0 15px;
+        font-size: 0.9rem;
+    }
+    
     .car-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 25px;
-        padding: 20px 0;
+        display: grid;
+        /* Forces 2 equal columns on mobile screens by default */
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; /* Tighter gap so the cards fit beautifully side-by-side */
+        padding: 10px 0;
     }
-}
 
-.car-card {
-    background: #1a1a1a; /* Dark luxury background */
-    border-radius: 15px;
-    overflow: hidden;
-    border: 1px solid #333;
-    transition: transform 0.3s ease;
-}
+    /* Tablet & Desktop Upgrade: Automatically switch to more columns on wider screens */
+    @media (min-width: 768px) {
+        .car-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+    }
 
-.car-card:hover {
-    transform: translateY(-5px);
-    border-color: #BF953F; /* Gold border on hover */
-}
+    .car-card {
+        background: #1a1a1a; /* Dark luxury background */
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #333;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
 
-.car-card-img {
-    width: 100%;
-    height: 150px; /* Reduces height on mobile so the grid layout stays balanced */
-    object-fit: cover;
-}
+    .car-card:hover {
+        transform: translateY(-5px);
+        border-color: #BF953F; /* Gold border on hover */
+    }
 
-/* Desktop sizing for the image */
-@media (min-width: 768px) {
     .car-card-img {
-        height: 220px;
+        width: 100%;
+        height: 150px; /* Reduces height on mobile so the grid layout stays balanced */
+        object-fit: cover;
+        display: block;
     }
-}
-.car-card-info {
-    padding: 15px;
-}
 
-.brand-label {
-    color: #888;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.car-name {
-    margin: 5px 0;
-    font-size: 1.2rem;
-    color: #fff;
-}
-
-.short-description {
-    color: #bbb;
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-    line-height: 1.4;
-}
-
-.price-tag {
-    color: #BF953F;
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin: 0;
-}
-/* Header Container Frame Setup */
-.animated-header-container {
-    position: relative;
-    width: 100%;
-    height: 220px; /* Slightly taller for a better cinematic frame */
-    background: #000;
-    border-radius: 8px;
-    margin-bottom: 25px;
-    overflow: hidden;
-    border: 1px solid #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Actual Car Background Image Layer with Zoom/Pan Animation */
-.cinematic-car-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: 1;
-    transform: scale(1);
-    animation: cinematicPan 20s ease-in-out infinite alternate;
-}
-
-/* Dark tint overlay layer to keep your golden text perfectly readable */
-.header-dark-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%);
-    z-index: 2;
-}
-
-/* Foreground Text Content Layer */
-.header-overlay {
-    position: relative;
-    z-index: 3;
-    text-align: center;
-}
-
-.showroom-title {
-    color: #FFD700; /* Luxury Gold */
-    font-size: 2.8rem;
-    font-weight: 900;
-    letter-spacing: 4px;
-    margin: 0;
-    text-transform: uppercase;
-    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1);
-}
-
-.showroom-subtitle {
-    color: #ccc;
-    font-size: 1.1rem;
-    margin-top: 8px;
-    letter-spacing: 2px;
-    text-shadow: 0px 2px 8px rgba(0, 0, 0, 1);
-}
-
-/* CINEMATIC PAN & ZOOM TIMELINE (Ken Burns Effect) */
-@keyframes cinematicPan {
-    0% {
-        transform: scale(1) translate(0px, 0px);
+    /* Desktop sizing for the image */
+    @media (min-width: 768px) {
+        .car-card-img {
+            height: 220px;
+        }
     }
-    50% {
-        transform: scale(1.08) translate(-15px, -5px);
+    
+    .car-card-info {
+        padding: 15px;
     }
-    100% {
-        transform: scale(1.15) translate(10px, 5px);
+
+    .brand-label {
+        color: #888;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
-}
-    </style>
-</head>
-<body>
-  <!-- NAVIGATION BACK BUTTON -->
-<div class="navigation-back-bar" style="margin-bottom: 15px;">
+
+    .car-name {
+        margin: 5px 0;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    .short-description {
+        color: #bbb;
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .price-tag {
+        color: #BF953F;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin: 0;
+    }
+    
+    /* Header Container Frame Setup */
+    .animated-header-container {
+        position: relative;
+        width: 100%;
+        height: 220px; /* Slightly taller for a better cinematic frame */
+        background: #000;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        overflow: hidden;
+        border: 1px solid #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Actual Car Background Image Layer with Zoom/Pan Animation */
+    .cinematic-car-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 1;
+        transform: scale(1);
+        animation: cinematicPan 20s ease-in-out infinite alternate;
+    }
+
+    /* Dark tint overlay layer to keep your golden text perfectly readable */
+    .header-dark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%);
+        z-index: 2;
+    }
+
+    /* Foreground Text Content Layer */
+    .header-overlay {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+    }
+
+    .showroom-title {
+        color: #FFD700; /* Luxury Gold */
+        font-size: 2.8rem;
+        font-weight: 900;
+        letter-spacing: 4px;
+        margin: 0;
+        text-transform: uppercase;
+        text-shadow: 0px 4px 15px rgba(0, 0, 0, 1);
+    }
+
+    .showroom-subtitle {
+        color: #ccc;
+        font-size: 1.1rem;
+        margin-top: 8px;
+        letter-spacing: 2px;
+        text-shadow: 0px 2px 8px rgba(0, 0, 0, 1);
+    }
+
+    /* CINEMATIC PAN & ZOOM TIMELINE */
+    @keyframes cinematicPan {
+        0% { transform: scale(1) translate(0px, 0px); }
+        50% { transform: scale(1.08) translate(-15px, -5px); }
+        100% { transform: scale(1.15) translate(10px, 5px); }
+    }
+</style>
+
+<div class="navigation-back-bar" style="margin-bottom: 15px; padding: 10px 20px;">
     <a href="{% url 'landing' %}" style="display: inline-flex; align-items: center; color: #FFD700; text-decoration: none; font-size: 14px; font-weight: 500; gap: 8px; transition: color 0.2s ease;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -255,33 +222,24 @@
         Back to Home
     </a>
 </div>  
- <!-- CINEMATIC CAR SHOWROOM HEADER -->
+
 <div class="animated-header-container">
-    <!-- Actual car photo background layer with automatic slow movement -->
     <div class="cinematic-car-bg" style="background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=983&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
-    
-    <!-- Dark gradient tint so the text pops out cleanly -->
     <div class="header-dark-overlay"></div>
-    
     <div class="header-overlay">
         <h1 class="showroom-title">SARKIN MOTA AUTOS</h1>
         <p class="showroom-subtitle">Discover Elite Performance & Luxury</p>
     </div>
 </div>
-  
-   <!-- Your Car Grid -->
-<div class="car-grid">
-  <!-- ADVANCED SEARCH AND FILTER BAR -->
-<div class="search-filter-container" style="background: #111; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #222;">
+
+<div class="search-filter-container" style="background: #111; padding: 20px; border-radius: 8px; margin: 0 20px 30px 20px; border: 1px solid #222;">
     <form method="GET" action="{% url 'car_list' %}" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;">
         
-        <!-- Keyword Search -->
         <div class="form-group" style="flex: 1; min-width: 200px;">
             <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Search Cars</label>
             <input type="text" name="q" value="{{ query }}" placeholder="e.g., Ferrari, V12, AMG..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
         </div>
 
-        <!-- Car Type Filter -->
         <div class="form-group" style="flex: 1; min-width: 150px;">
             <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Body Type</label>
             <select name="car_type" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
@@ -293,60 +251,53 @@
             </select>
         </div>
 
-        <!-- Max Budget Filter -->
         <div class="form-group" style="flex: 1; min-width: 150px;">
             <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Max Budget (₦)</label>
             <input type="number" name="max_price" value="{{ max_price }}" placeholder="Maximum price..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
         </div>
 
-        <!-- Action Buttons -->
         <div class="form-group" style="display: flex; gap: 10px;">
             <button type="submit" style="padding: 10px 20px; background: #FFD700; color: #000; border: none; font-weight: bold; border-radius: 4px; cursor: pointer;">Filter</button>
             {% if query or car_type or max_price %}
                 <a href="{% url 'car_list' %}" style="padding: 10px 15px; background: #333; color: #fff; text-decoration: none; border-radius: 4px; text-align: center; font-size: 14px;">Clear</a>
             {% endif %}
         </div>
-
     </form>
 </div>  
-    {% for car in page_obj %}
-        <div class="car-card">
-            <div class="image-container" style="position: relative;">
-        
-        <!-- AUTOMATIC BADGES LAYER -->
-        <div class="badge-container" style="position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; gap: 5px;">
-            {% if car.is_new %}
-                <span class="badge badge-new" style="background-color: #00E676; color: #000; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">New</span>
-            {% endif %}
-            
-            {% if car.is_hot %}
-                <span class="badge badge-hot" style="background-color: #FF3D00; color: #fff; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">🔥 Hot</span>
-            {% endif %}
-        </div>
 
-        <!-- Your existing Car Cover Image -->
-        <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-img">
+<div class="showroom">
+    <div class="car-grid">
+        {% for car in page_obj %}
+            <div class="car-card">
+                <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit;">
+                    <div class="image-container" style="position: relative;">
+                        <div class="badge-container" style="position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; gap: 5px;">
+                            {% if car.is_new %}
+                                <span class="badge badge-new" style="background-color: #00E676; color: #000; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">New</span>
+                            {% endif %}
+                            
+                            {% if car.is_hot %}
+                                <span class="badge badge-hot" style="background-color: #FF3D00; color: #fff; font-weight: bold; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-transform: uppercase;">🔥 Hot</span>
+                            {% endif %}
+                        </div>
+
+                        <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-card-img">
+                    </div>
+                    
+                    <div class="car-card-info">
+                        <span class="brand-label">{{ car.brand }}</span>
+                        <h3 class="car-name">{{ car.name }}</h3>
+                        <p class="short-description">{{ car.description|truncatewords:15 }}</p>
+                        <p class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</p>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <p style="color: #888; text-align: center; grid-column: 1 / -1; width: 100%; padding: 40px 0;">No cars available in the showroom yet.</p>
+        {% endfor %}
     </div>
-    
-    <!-- Rest of your car card details (Name, Price, etc.) -->
-</div>
-            <a href="{% url 'car_detail' car.id %}" style="text-decoration: none; color: inherit;">
-            <img src="{{ car.image.url }}" alt="{{ car.name }}" class="car-img">
-                <div class="car-card-info">
-                    <span class="brand-label">{{ car.brand }}</span>
-                    <h3 class="car-name">{{ car.name }}</h3>
-                    <!-- This adds the short description back -->
-                    <p class="short-description">{{ car.description|truncatewords:15 }}</p>
-                    <p class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</p>
-                </div>
-            </a>
-        </div>
-    {% empty %}
-        <p style="color: #888; text-align: center; width: 100%;">No cars available in the showroom yet.</p>
-    {% endfor %}
 </div>
 
-<!-- Numeric Pagination -->
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -364,6 +315,4 @@
         {% endif %}
     </span>
 </div>
-</body>
-</html>
 {% endblock %}
