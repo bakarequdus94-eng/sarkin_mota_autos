@@ -18,15 +18,51 @@
             <span class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</span>
             <p class="description">{{ car.description }}</p>
             <div class="vehicle-overview" style="background: #111; padding: 20px; border-radius: 8px; margin-top: 20px;">
-    <h3 style="color: #fff; border-bottom: 1px solid #222; padding-bottom: 10px;">Vehicle Specifications</h3>
+   <!-- VEHICLE SPECIFICATIONS CONTAINER -->
+<div style="margin: 35px 0; font-family: 'Poppins', sans-serif;">
+    <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px;">
+        Vehicle Specifications
+    </h3>
     
-    <div class="specs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; color: #ccc;">
-        <div><strong>Year:</strong> <span style="color: #fff; float: right;">{{ car.year }}</span></div>
-        <div><strong>Mileage:</strong> <span style="color: #fff; float: right;">{{ car.mileage|intcomma }} km</span></div>
-        <div><strong>Condition:</strong> <span style="color: #fff; float: right;">{{ car.condition }}</span></div>
-        <div><strong>Transmission:</strong> <span style="color: #fff; float: right;">{{ car.transmission|default:"Automatic" }}</span></div>
-        <div><strong>Fuel Type:</strong> <span style="color: #fff; float: right;">{{ car.fuel_type|default:"Petrol" }}</span></div>
-        <div><strong>Body Type:</strong> <span style="color: #fff; float: right;">{{ car.body_type|default:"SUV" }}</span></div>
+    <!-- FLEXIBLE GRIDS: 2 columns on laptop, drops cleanly to 1 column on mobile phones -->
+    <div style="display: flex; flex-wrap: wrap; gap: 16px 30px;">
+        
+        <!-- Spec Block 1 -->
+        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+            <span style="color: #888888; font-weight: 500;">Year:</span>
+            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.year }}</span>
+        </div>
+        
+        <!-- Spec Block 2 -->
+        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+            <span style="color: #888888; font-weight: 500;">Mileage:</span>
+            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.mileage }} km</span>
+        </div>
+        
+        <!-- Spec Block 3 -->
+        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+            <span style="color: #888888; font-weight: 500;">Condition:</span>
+            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.get_condition_display }}</span>
+        </div>
+        
+        <!-- Spec Block 4 -->
+        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+            <span style="color: #888888; font-weight: 500;">Transmission:</span>
+            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.get_transmission_display }}</span>
+        </div>
+        
+        <!-- Spec Block 5 -->
+        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+            <span style="color: #888888; font-weight: 500;">Fuel Type:</span>
+            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.fuel_type }}</span>
+        </div>
+        
+        <!-- Spec Block 6 -->
+        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+            <span style="color: #888888; font-weight: 500;">Body Type:</span>
+            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.body_type }}</span>
+        </div>
+
     </div>
 </div>
             <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
@@ -39,9 +75,10 @@
 
     <hr style="border-color: #222; margin: 40px 0;">
 
-    <!-- REVIEWS DISPLAY SECTION -->
-    <div class="reviews-container" style="max-width: 750px; margin: 40px auto; padding: 0 20px; font-family: 'Poppins', sans-serif;">
+   <!-- USER REVIEWS & RATINGS SECTION -->
+<div class="reviews-container" style="max-width: 750px; margin: 40px auto; padding: 0 15px; font-family: 'Poppins', sans-serif; box-sizing: border-box;">
     
+    <!-- Display Existing Reviews -->
     <div class="reviews-display-box" style="margin-bottom: 45px;">
         <h3 style="color: #d4af37; font-size: 1.5rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px;">
             User Reviews & Ratings
@@ -50,10 +87,10 @@
         {% if reviews %}
             <div style="display: flex; flex-direction: column; gap: 20px;">
                 {% for review in reviews %}
-                    <div style="background: #111111; border: 1px solid #222222; border-radius: 12px; padding: 20px; transition: transform 0.3s ease;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="background: #111111; border: 1px solid #222222; border-radius: 12px; padding: 20px; box-sizing: border-box;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
                             <strong style="color: #ffffff; font-size: 1.1rem;">{{ review.name }}</strong>
-                            <span style="color: #d4af37; letter-spacing: 2px;">
+                            <span style="color: #d4af37; letter-spacing: 2px; font-size: 0.9rem;">
                                 {% if review.rating == 5 %}⭐⭐⭐⭐⭐
                                 {% elif review.rating == 4 %}⭐⭐⭐⭐
                                 {% elif review.rating == 3 %}⭐⭐⭐
@@ -61,7 +98,7 @@
                                 {% else %}⭐{% endif %}
                             </span>
                         </div>
-                        <p style="color: #aaaaaa; line-height: 1.6; margin: 0; font-size: 0.95rem;">{{ review.comment }}</p>
+                        <p style="color: #aaaaaa; line-height: 1.6; margin: 0; font-size: 0.95rem; word-break: break-word;">{{ review.comment }}</p>
                         <small style="color: #555555; display: block; margin-top: 12px; text-align: right;">{{ review.created_at|date:"M d, Y" }}</small>
                     </div>
                 {% endfor %}
@@ -73,34 +110,36 @@
         {% endif %}
     </div>
 
-    <div class="review-form-card" style="background: linear-gradient(145deg, #121212, #1a1a1a); border: 1px solid #d4af37; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    <!-- Premium Submit Review Form Card -->
+    <div class="review-form-card" style="background: linear-gradient(145deg, #121212, #1a1a1a); border: 1px solid #d4af37; border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; width: 100%; overflow: hidden;">
         <h3 style="color: #ffffff; font-size: 1.3rem; margin-top: 0; margin-bottom: 25px; font-weight: 600; letter-spacing: 0.5px;">
             Submit an Inspection Rating
         </h3>
         
-        <form method="POST" action="{% url 'car_detail' car.id %}" style="display: flex; flex-direction: column; gap: 20px;">
+        <form method="POST" action="{% url 'car_detail' car.id %}" style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
             {% csrf_token %}
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- FLEX WRAPPING FIX FOR NAME & EMAIL -->
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; width: 100%;">
+                <div style="display: flex; flex-direction: column; gap: 8px; flex: 1 1 280px;">
                     <label style="color: #cccccc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Your Name</label>
                     <input type="text" name="name" required placeholder="John Doe" 
-                           style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 12px 16px; font-size: 0.95rem; outline: none; transition: border-color 0.3s;"
+                           style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 12px 16px; font-size: 0.95rem; outline: none; width: 100%; box-sizing: border-box; transition: border-color 0.3s;"
                            onfocus="this.style.borderColor='#d4af37'" onblur="this.style.borderColor='#333333'">
                 </div>
                 
-                <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 8px; flex: 1 1 280px;">
                     <label style="color: #cccccc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Your Email</label>
                     <input type="email" name="email" required placeholder="john@example.com" 
-                           style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 12px 16px; font-size: 0.95rem; outline: none; transition: border-color 0.3s;"
+                           style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 12px 16px; font-size: 0.95rem; outline: none; width: 100%; box-sizing: border-box; transition: border-color 0.3s;"
                            onfocus="this.style.borderColor='#d4af37'" onblur="this.style.borderColor='#333333'">
                 </div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
                 <label style="color: #cccccc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Rating Score</label>
                 <select name="rating" required 
-                        style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 12px 16px; font-size: 0.95rem; outline: none; cursor: pointer; appearance: none; transition: border-color 0.3s;"
+                        style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 12px 16px; font-size: 0.95rem; outline: none; cursor: pointer; width: 100%; box-sizing: border-box; transition: border-color 0.3s;"
                         onfocus="this.style.borderColor='#d4af37'" onblur="this.style.borderColor='#333333'">
                     <option value="5" style="background: #111;">⭐⭐⭐⭐⭐ 5 Stars (Excellent)</option>
                     <option value="4" style="background: #111;">⭐⭐⭐⭐ 4 Stars (Very Good)</option>
@@ -110,15 +149,15 @@
                 </select>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
                 <label style="color: #cccccc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Your Comment</label>
-                <textarea name="comment" rows="4" required placeholder="Share your experience or inspection feedback about this vehicle..." 
-                          style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 14px 16px; font-size: 0.95rem; outline: none; resize: vertical; line-height: 1.5; transition: border-color 0.3s;"
+                <textarea name="comment" rows="4" required placeholder="Share your experience or inspection feedback..." 
+                          style="background: #080808; border: 1px solid #333333; color: #ffffff; border-radius: 8px; padding: 14px 16px; font-size: 0.95rem; outline: none; resize: vertical; line-height: 1.5; width: 100%; box-sizing: border-box; transition: border-color 0.3s;"
                           onfocus="this.style.borderColor='#d4af37'" onblur="this.style.borderColor='#333333'"></textarea>
             </div>
 
             <button type="submit" 
-                    style="background: #d4af37; color: #000000; border: none; border-radius: 8px; padding: 14px 24px; font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212,175,55,0.2);"
+                    style="background: #d4af37; color: #000000; border: none; border-radius: 8px; padding: 14px 24px; font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 10px; width: 100%; box-sizing: border-box; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212,175,55,0.2);"
                     onmouseover="this.style.background='#ffffff'; this.style.boxShadow='0 4px 20px rgba(255,255,255,0.3)'" 
                     onmouseout="this.style.background='#d4af37'; this.style.boxShadow='0 4px 15px rgba(212,175,55,0.2)'">
                 Submit Inspection Report
@@ -126,6 +165,7 @@
         </form>
     </div>
 </div>
+   
           
     <!-- MEDIA CAROUSEL GALLERY -->
     <h2 class="gallery-title">Additional Photos & Videos</h2>
