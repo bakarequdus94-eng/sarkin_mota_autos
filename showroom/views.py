@@ -47,9 +47,37 @@ def car_list(request):
     return render(request, 'showroom/car_list.html', context)
 
 # View for car details page
-def car_detail(request, pk):
-    car = get_object_or_404(Car, pk=pk)
-    return render(request, 'showroom/car_detail.html', {'car': car})
+def car_detail(request, car_id):
+    # Fetch the car or return a 404 error page if missing
+    car = get_object_or_404(Car, id=car_id)
+    
+    # Process review submissions when users click 'Submit Review'
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        # Save the new review straight into your PostgreSQL database
+        if name and email and rating and comment:
+            Review.objects.create(
+                car=car,
+                name=name,
+                email=email,
+                rating=int(rating),
+                comment=comment
+            )
+            # Redirect straight back to the same page to prevent duplicate submissions on refresh
+            return redirect('car_detail', car_id=car.id)
+
+    # Fetch all approved reviews for this specific vehicle to display them
+    reviews = car.reviews.all()  # Uses the related_name='reviews' from your model
+
+    context = {
+        'car': car,
+        'reviews': reviews,
+    }
+    return render(request, 'showroom/car_detail.html', context)
 
 # View for submitting a customer review
 def add_review(request, car_id):

@@ -64,30 +64,37 @@
         <h4 style="color: #fff; margin-bottom: 15px;">Submit an Inspection Rating</h4>
         
         <!-- Action target uses dot fallback if your namespace configuration varies -->
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
-                <input type="text" name="name" placeholder="Your Name" required style="flex: 1; min-width: 200px; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px;">
-                <input type="email" name="email" placeholder="Your Email (Optional)" style="flex: 1; min-width: 200px; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px;">
-            </div>
-            
-            <div style="margin-bottom: 15px;">
-                <label style="color: #FFD700; display: block; margin-bottom: 5px; font-size: 14px;">Score Rating:</label>
-                <select name="rating" required style="padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; width: 150px;">
-                    <option value="5">5 Stars ★★★★★</option>
-                    <option value="4">4 Stars ★★★★</option>
-                    <option value="3">3 Stars ★★★</option>
-                    <option value="2">2 Stars ★★</option>
-                    <option value="1">1 Star ★</option>
-                </select>
-            </div>
+       <form method="POST" action="{% url 'car_detail' car.id %}">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" name="name" required class="form-control">
+    </div>
 
-            <div style="margin-bottom: 15px;">
-                <textarea name="comment" placeholder="Write your inspection feedback or inquiry details here..." rows="4" required style="width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; resize: none; box-sizing: border-box;"></textarea>
-            </div>
+    <div class="form-group">
+        <label>Your Email</label>
+        <input type="email" name="email" required class="form-control">
+    </div>
 
-            <button type="submit" style="padding: 12px 30px; background: #FFD700; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">Submit Review</button>
-        </form>
+    <div class="form-group">
+        <label>Rating</label>
+        <select name="rating" required class="form-control">
+            <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+            <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+            <option value="3">⭐⭐⭐ 3 Stars</option>
+            <option value="2">⭐⭐ 2 Stars</option>
+            <option value="1">⭐ 1 Star</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Your Comment</label>
+        <textarea name="comment" rows="4" required class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">Submit Review</button>
+</form>
     </div>
           
     <!-- MEDIA CAROUSEL GALLERY -->
