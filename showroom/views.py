@@ -23,14 +23,15 @@ def car_list(request):
             Q(description__icontains=query)
         )
     
+    # FIXED: Filtering by 'body_type' (your model field) using the 'car_type' parameter from the URL
     if car_type:
-        cars = cars.filter(car_type__iexact=car_type)
+        cars = cars.filter(body_type__iexact=car_type)
 
     if max_price:
         try:
             cars = cars.filter(price__lte=float(max_price))
         except ValueError:
-            pass  # Ignore if the user type input isn't a valid number
+            pass  # Ignore if the user input isn't a valid number
 
     # Pagination setup (6 cars per page)
     paginator = Paginator(cars, 6) 
