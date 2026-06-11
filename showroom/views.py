@@ -47,9 +47,9 @@ def car_list(request):
     return render(request, 'showroom/car_list.html', context)
 
 # View for car details page
-def car_detail(request, car_id):
-    # Fetch the car or return a 404 error page if missing
-    car = get_object_or_404(Car, id=car_id)
+def car_detail(request, pk):
+    # Fetch the car using the primary key (pk)
+    car = get_object_or_404(Car, id=pk)
     
     # Process review submissions when users click 'Submit Review'
     if request.method == 'POST':
@@ -68,7 +68,7 @@ def car_detail(request, car_id):
                 comment=comment
             )
             # Redirect straight back to the same page to prevent duplicate submissions on refresh
-            return redirect('car_detail', car_id=car.id)
+            return redirect('car_detail', pk=car.id)
 
     # Fetch all approved reviews for this specific vehicle to display them
     reviews = car.reviews.all()  # Uses the related_name='reviews' from your model
