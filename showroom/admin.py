@@ -15,28 +15,24 @@ class CarVideoInline(admin.TabularInline):
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    # Combined single list_display config block
-    list_display = ('brand', 'name', 'price', 'year', 'transmission', 'condition')
-    
-    # Hooks up the photo gallery and video slots inside the car creation page
-    inlines = [CarImageInline, CarVideoInline] 
-    
-    # Adds a sidebar filtering layout on the right side of the admin screen
-    list_filter = ('condition', 'transmission', 'year', 'brand')
-    
-    # Lets you search your vehicle inventory quickly
+    list_display = ('name', 'brand', 'price', 'year', 'condition', 'is_available', 'created_at')
+    list_filter = ('brand', 'condition', 'is_available', 'body_type')
     search_fields = ('name', 'brand', 'description')
-
-    # Fixed: Correctly indented inside CarAdmin class to register your custom JS script
-    class Media:
-        js = ('showroom/js/admin_drag_drop.js',)
-
+    ordering = ('-created_at',)
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('car', 'name', 'rating', 'created_at')
-    list_filter = ('rating', 'created_at')
-    search_fields = ('name', 'comment', 'car__name')
+    # This makes the reviews pop up cleanly in a table view
+    list_display = ('name', 'car', 'rating', 'email', 'created_at')
+    
+    # Allows you to instantly filter by rating (e.g., view all 1-star or 5-star reviews)
+    list_filter = ('rating', 'created_at', 'car')
+    
+    # Let's you quickly search through comments or reviewer names
+    search_fields = ('name', 'comment', 'email')
+    
+    # Sorts them so the newest inspection reviews appear at the very top
+    ordering = ('-created_at',)
 
 
 # Optional separate endpoints for single actions
