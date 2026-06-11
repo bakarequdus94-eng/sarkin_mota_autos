@@ -12,22 +12,32 @@ class Car(models.Model):
     image = CloudinaryField('image') 
     created_at = models.DateTimeField(auto_now_add=True)
     
-    # Made these safe for existing database records with null=True, blank=True
-    year = models.PositiveIntegerField(default=2026, null=True, blank=True)
-    mileage = models.PositiveIntegerField(help_text="Mileage in kilometers (km)", default=0, null=True, blank=True)
-    
+   # Made these safe for existing database records
+    year = models.PositiveIntegerField(default=2020)
+    mileage = models.PositiveIntegerField(default=0)
+
     TRANSMISSION_CHOICES = [
         ('Automatic', 'Automatic'),
         ('Manual', 'Manual'),
     ]
-    transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES, default='Automatic', null=True, blank=True)
-    
+    transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES, default='Automatic')
+
     CONDITION_CHOICES = [
         ('Brand New', 'Brand New'),
         ('Foreign Used', 'Foreign Used'),
         ('Local Used', 'Local Used'),
     ]
-    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='Foreign Used', null=True, blank=True)
+    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='Foreign Used')
+
+    # THE MISSING FIELDS RENDER IS LOOKING FOR:
+    body_type = models.CharField(max_length=50, default='SUV')
+    is_available = models.BooleanField(default=True)
+    
+    # Other metadata fields
+    fuel_type = models.CharField(max_length=50, default='Petrol')
+    engine_size = models.CharField(max_length=50, default='V6')
+    color = models.CharField(max_length=50, default='Black')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def is_new(self):
