@@ -3,7 +3,6 @@
 
 {% block content %}
 <div class="container">
-    <!-- MAIN PRODUCT CORNER -->
     <div class="main-display">
         <div class="media-column">
             <a href="#" onclick="history.back(); return false;" class="btn-back">← Back to Showroom</a>
@@ -17,65 +16,51 @@
             <h1 class="car-headline">{{ car.name }}</h1>
             <span class="price-tag">₦{{ car.price|floatformat:2|intcomma }}</span>
             <p class="description">{{ car.description }}</p>
-            <div class="vehicle-overview" style="background: #111; padding: 20px; border-radius: 8px; margin-top: 20px;">
-   <!-- VEHICLE SPECIFICATIONS CONTAINER -->
-<div style="margin: 35px 0; font-family: 'Poppins', sans-serif;">
-    <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px;">
-        Vehicle Specifications
-    </h3>
-    
-    <!-- FLEXIBLE GRIDS: 2 columns on laptop, drops cleanly to 1 column on mobile phones -->
-    <div style="display: flex; flex-wrap: wrap; gap: 16px 30px;">
-        
-        <!-- Spec Block 1 -->
-        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
-            <span style="color: #888888; font-weight: 500;">Year:</span>
-            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.year }}</span>
-        </div>
-        
-        <!-- Spec Block 2 -->
-        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
-            <span style="color: #888888; font-weight: 500;">Mileage:</span>
-            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.mileage }} km</span>
-        </div>
-        
-        <!-- Spec Block 3 -->
-        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
-            <span style="color: #888888; font-weight: 500;">Condition:</span>
-            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.get_condition_display }}</span>
-        </div>
-        
-        <!-- Spec Block 4 -->
-        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
-            <span style="color: #888888; font-weight: 500;">Transmission:</span>
-            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.get_transmission_display }}</span>
-        </div>
-        
-        <!-- Spec Block 5 -->
-        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
-            <span style="color: #888888; font-weight: 500;">Fuel Type:</span>
-            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.fuel_type }}</span>
-        </div>
-        
-        <!-- Spec Block 6 -->
-        <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
-            <span style="color: #888888; font-weight: 500;">Body Type:</span>
-            <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.body_type }}</span>
-        </div>
-
-    </div>
-</div>
-            <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
+            
+            <div style="background: #111; padding: 20px; border-radius: 8px; margin-top: 20px; font-family: 'Poppins', sans-serif; box-sizing: border-box;">
+                <h3 style="color: #ffffff; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px;">
+                    Vehicle Specifications
+                </h3>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 12px 24px;">
+                    <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+                        <span style="color: #888888; font-weight: 500;">Year:</span>
+                        <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.year }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+                        <span style="color: #888888; font-weight: 500;">Mileage:</span>
+                        <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.mileage }} km</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+                        <span style="color: #888888; font-weight: 500;">Condition:</span>
+                        <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.get_condition_display }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+                        <span style="color: #888888; font-weight: 500;">Transmission:</span>
+                        <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.get_transmission_display }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+                        <span style="color: #888888; font-weight: 500;">Fuel Type:</span>
+                        <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.fuel_type }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; flex: 1 1 200px; padding: 8px 0; border-bottom: 1px solid #161616;">
+                        <span style="color: #888888; font-weight: 500;">Body Type:</span>
+                        <span style="color: #ffffff; font-weight: 600; text-align: right;">{{ car.body_type }}</span>
+                    </div>
+                </div>
+            </div> <a href="https://wa.me/2347015136111?text=Hello%20Sarkin%20Mota%20Autos,%20I%20am%20interested%20in%20the%20{{ car.brand }}%20{{ car.name }}.%0A%0AHere%20is%20the%20link:%20{{ request.build_absolute_uri }}" 
                class="wa-button" 
-               target="_blank">
+               target="_blank" style="margin-top: 25px;">
                Chat with an Agent
             </a>
         </div>
-    </div>
+    </div> <hr style="border-color: #222; margin: 50px 0;">
 
-    <hr style="border-color: #222; margin: 40px 0;">
-
-     <!-- MEDIA CAROUSEL GALLERY -->
     <h2 class="gallery-title">Additional Photos & Videos</h2>
     <div class="slider-wrapper">
         <div class="slider" id="carSlider"> 
@@ -100,7 +85,6 @@
     {% endif %}
 </div> 
 
-<!-- FULLSCREEN LIGHTBOX FRAME -->
 <div id="imageModal" onclick="closeModal()">
     <div class="modal-close" onclick="closeModal()">
         <svg viewBox="0 0 24 24" fill="none" stroke="#BF953F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -114,10 +98,7 @@
     <p class="modal-footer-text">Sarkin Mota | Premium Luxury Car</p>
 </div>
 
-   <!-- USER REVIEWS & RATINGS SECTION -->
-<div class="reviews-container" style="max-width: 750px; margin: 40px auto; padding: 0 15px; font-family: 'Poppins', sans-serif; box-sizing: border-box;">
-    
-    <!-- Display Existing Reviews -->
+<div class="reviews-container" style="max-width: 750px; margin: 60px auto 40px auto; padding: 0 15px; font-family: 'Poppins', sans-serif; box-sizing: border-box;">
     <div class="reviews-display-box" style="margin-bottom: 45px;">
         <h3 style="color: #d4af37; font-size: 1.5rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px;">
             User Reviews & Ratings
@@ -149,7 +130,6 @@
         {% endif %}
     </div>
 
-    <!-- Premium Submit Review Form Card -->
     <div class="review-form-card" style="background: linear-gradient(145deg, #121212, #1a1a1a); border: 1px solid #d4af37; border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; width: 100%; overflow: hidden;">
         <h3 style="color: #ffffff; font-size: 1.3rem; margin-top: 0; margin-bottom: 25px; font-weight: 600; letter-spacing: 0.5px;">
             Submit an Inspection Rating
@@ -157,8 +137,6 @@
         
         <form method="POST" action="{% url 'car_detail' car.id %}" style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
             {% csrf_token %}
-            
-            <!-- FLEX WRAPPING FIX FOR NAME & EMAIL -->
             <div style="display: flex; flex-wrap: wrap; gap: 20px; width: 100%;">
                 <div style="display: flex; flex-direction: column; gap: 8px; flex: 1 1 280px;">
                     <label style="color: #cccccc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Your Name</label>
@@ -205,8 +183,7 @@
     </div>
 </div>
    
-          
-   <script>
+<script>
     function openModal(src, isVideo = false) {
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
@@ -272,22 +249,24 @@ body {
 }
 .btn-back:hover { color: #fff; }
 
-/* Desktop side-by-side grid upgrade */
-.main-display { 
-    display: grid; 
-    grid-template-columns: 1fr; 
-    gap: 30px; 
-    align-items: start;
-}
-
-@media (min-width: 1024px) {
-  .main-display {
+/* Responsive layout behavior */
+.main-display {
     display: grid;
-    grid-template-columns: 1.5fr 1fr; /* media-column takes 1.5 parts, car-info-box takes 1 part */
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 30px;
     align-items: start;
     width: 100%;
-  }
+}
+
+@media (min-width: 850px) {
+    .main-display {
+        grid-template-columns: 1.4fr 1fr;
+        gap: 3rem;
+    }
+    .featured-img-frame {
+        position: sticky;
+        top: 30px;
+    }
 }
 
 .featured-img-frame { width: 100%; }
@@ -331,7 +310,6 @@ body {
     text-align: center;
 }
 
-/* Horizontal slider container adjustments */
 .slider-wrapper { 
     width: 100%; 
     overflow-x: auto; 
@@ -354,7 +332,6 @@ body {
 }
 .slide img, .slide video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
-/* Lightbox overlay styling modules */
 #imageModal {
     display: none; 
     position: fixed; 
