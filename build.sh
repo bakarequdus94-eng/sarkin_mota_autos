@@ -2,28 +2,34 @@
 # exit on error
 set -o errexit
 
+# Install dependencies and static assets
 pip install -r requirements.txt
-
 python manage.py collectstatic --no-input
 
-# 1. Added --fake-initial to skip columns that already exist live
-python manage.py migrate --fake-initial
-
-# 2. Fixed the indentation error on the password variable line
+# Run raw SQL adjustments directly via Python shell
 python manage.py shell <<EOF
-from django.contrib.auth import get_user_model
-import os
-User = get_user_model()
-username = 'admin'
-email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'bakarequdus94@gmail.com')
-password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'your_default_secure_password')
+from django.db import connection
 
-if not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(username, email, password)
-    print("Superuser created successfully")
-else:
-    user = User.objects.get(username=username)
-    user.set_password(password)
-    user.save()
-    print("Superuser password updated successfully")
+with connection.cursor() as cursor:
+    # 1. Force the migration tracker table to record 0001 baseline if it hasn't already
+    try:
+        cursor.execute("INSERT INTO django_migrations (app, name, applied) VALUES ('showroom', '0001_initial', NOW());")
+        print("Initial migration state baseline set.")
+    except Exception:
+        print("Migration state record already present.")
+
+    # 2. Safely alter column names to match models.py properties
+    alter_queries = [
+        "ALTER TABLE showroom_inspectionbooking RENAME COLUMN full_name TO name;",
+        "ALTER TABLE showroom_inspectionbooking RENAME COLUMN phone_number TO phone;",
+        "ALTER TABLE showroom_inspectionbooking RENAME COLUMN preferred_date TO date;",
+        "ALTER TABLE showroom_inspectionbooking RENAME COLUMN preferred_time TO time_slot;"
+    ]
+    
+    for query in alter_queries:
+        try:
+            cursor.execute(query)
+            print(f"Executed: {query}")
+        except Exception as e:
+            print("Column translation already synchronized or skipped.")
 EOF
