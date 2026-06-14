@@ -11,8 +11,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='InspectionBooking',
             fields=[
-                ('id', models.BigAutoField(auto_state=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_name=255)),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('full_name', models.CharField(max_name=255)),
                 ('phone_number', models.CharField(max_name=20)),
                 ('email', models.EmailField(max_name=254)),
                 ('preferred_date', models.DateField()),
