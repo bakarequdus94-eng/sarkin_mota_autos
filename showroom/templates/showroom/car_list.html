@@ -54,6 +54,17 @@
     </form>
 </div>  
 
+<div style="margin: 0 20px 20px 20px;">
+    <div class="currency-switcher-container">
+        <label for="currency-select" class="gold-label">Currency:</label>
+        <select id="currency-select" onchange="convertPrices(this.value)">
+            <option value="NGN">NGN (₦)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+        </select>
+    </div>
+</div>
+
 <div class="showroom-wrapper">
     <div class="car-grid">
         {% for car in page_obj %}
@@ -86,7 +97,7 @@
                         </div>
 
                         <div class="car-card-bottom">
-                            <span class="price-tag">₦{{ car.price|intcomma }}</span>
+                            <span class="price-tag car-price" data-base-price="{{ car.price }}">₦{{ car.price|intcomma }}</span>
                             <span class="btn-view">Details →</span>
                         </div>
                     </div>
@@ -119,6 +130,32 @@
 {% endif %}
 
 <style>
+    .currency-switcher-container {
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(191, 149, 63, 0.3);
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .gold-label {
+        color: #BF953F;
+        font-weight: bold;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    #currency-select {
+        background: #000;
+        color: #fff;
+        border: 1px solid #BF953F;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        outline: none;
+    }
     body {
         background: #050505;
         color: #fff;
@@ -131,7 +168,6 @@
         padding: 0 20px;
     }
 
-    /* Beautiful 2-column mobile configuration that updates seamlessly up to desktop width grids */
     .car-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr); 
@@ -214,20 +250,31 @@
         white-space: nowrap;
     }
 
-    /* Aligns price and button side-by-side cleanly */
-    .car-card-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: auto;
-        padding-top: 5px;
-    }
+    /* Aligns price and button cleanly, stacking automatically on tiny displays */
+.car-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Aligns bottoms cleanly */
+    flex-wrap: wrap;       /* Crucial: Allows items to drop down instead of overlapping */
+    gap: 8px;              /* Adds protective breathing space between price and details button */
+    margin-top: auto;
+    padding-top: 8px;
+}
 
+/* Ensure the price tag resizes down slightly on mobile if it gets too massive */
+.price-tag {
+    color: #BF953F;
+    font-weight: 800;
+    font-size: 1rem;       /* Slightly reduced font size for mobile text safety */
+    word-break: break-all; /* Keeps large numbers safe inside the container layout */
+}
+
+/* Make sure the text font adjusts elegantly as screen estates increase */
+@media (min-width: 768px) {
     .price-tag {
-        color: #BF953F;
-        font-weight: 800;
-        font-size: 1.1rem;
+        font-size: 1.15rem; /* Restores large luxury premium font on tablet/desktop displays */
     }
+}
 
     .btn-view {
         color: #fff;
@@ -243,7 +290,6 @@
         color: #BF953F;
     }
     
-    /* Cinematic Frame Setup */
     .animated-header-container {
         position: relative;
         width: calc(100% - 40px);
@@ -318,7 +364,6 @@
         100% { transform: scale(1.12) translate(8px, 3px); }
     }
     
-    /* Pagination Frame */
     .pagination {
         text-align: center;
         margin: 40px 0;
@@ -348,4 +393,44 @@
         font-size: 0.9rem;
     }
 </style>
+
+<script>
+    window.exchangeRates = {{ rates_json|safe }};
+</script>
+
+<script>
+    function convertPrices(targetCurrency) {
+        const priceElements = document.querySelectorAll('.car-price');
+        const rates = window.exchangeRates || { "USD": 0.00065, "EUR": 0.00060, "NGN": 1.0 };
+        
+        const symbols = {
+            'NGN': '₦',
+            'USD': '$',
+            'EUR': '€'
+        };
+
+        priceElements.forEach(el => {
+            let rawPrice = el.getAttribute('data-base-price');
+            
+            if (rawPrice) {
+                // Safeguard: strips out anything that isn't a digit or a dot
+                rawPrice = rawPrice.replace(/[^0-9.]/g, '');
+                const basePrice = parseFloat(rawPrice);
+                
+                if (!isNaN(basePrice)) {
+                    const conversionRate = rates[targetCurrency];
+                    const convertedPrice = basePrice * conversionRate;
+                    
+                    // Display formatting configurations
+                    const formattedPrice = convertedPrice.toLocaleString(undefined, {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: targetCurrency === 'NGN' ? 0 : 2
+                    });
+                    
+                    el.innerHTML = `${symbols[targetCurrency]}${formattedPrice}`;
+                }
+            }
+        });
+    }
+</script>
 {% endblock %}

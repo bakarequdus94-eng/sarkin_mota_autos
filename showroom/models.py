@@ -3,6 +3,7 @@ from cloudinary.models import CloudinaryField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.models import User
 
 class Car(models.Model):
     brand = models.CharField(max_length=100)
@@ -92,3 +93,27 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.rating} Stars by {self.name} for {self.car.name}"
+        
+class InspectionBooking(models.Model):
+    TIME_SLOTS = [
+        ('10:00', '10:00 AM'),
+        ('12:00', '12:00 PM'),
+        ('14:00', '02:00 PM'),
+        ('16:00', '04:00 PM'),
+    ]
+
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='inspections')
+    # If users aren't forced to log in, you can use name/phone instead of a User relation
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+    date = models.DateField()
+    time_slot = models.CharField(max_length=5, choices=TIME_SLOTS)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Prevents double booking the same car at the exact same time
+        unique_together = ('car', 'date', 'time_slot')
+
+    def __str__(self):
+        return f"Inspection for {self.car.name} by {self.name} on {self.date}"

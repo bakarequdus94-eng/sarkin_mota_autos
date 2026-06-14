@@ -1,6 +1,12 @@
 from django.contrib import admin
 from .models import Car, CarImage, CarVideo, Review
+from .models import Car, Review, InspectionBooking
 
+@admin.register(InspectionBooking)
+class InspectionBookingAdmin(admin.ModelAdmin):
+    list_display = ('car', 'name', 'date', 'time_slot', 'created_at')
+    list_filter = ('date', 'time_slot', 'car')
+    search_fields = ('name', 'email', 'phone', 'car__name')
 # Add multiple photos directly inside the Car admin page
 class CarImageInline(admin.TabularInline):
     model = CarImage

@@ -1,8 +1,47 @@
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect  # Added redirect here
-from .models import Car, Review  # Cleaned up duplicate imports
+from .models import Car, Review # Cleaned up duplicate imports
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from showroom.models import Car, InspectionBooking
+import datetime
 
+@require_POST
+def book_inspection(request, car_id):
+    try:
+        # 1. Grab the specific luxury car being booked
+        car = get_object_or_404(Car, id=car_id)
+        
+        # 2. Extract the data submitted securely from the modal form
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        date_str = request.POST.get('date')
+        time_slot = request.POST.get('time_slot')
+
+        # 3. Convert the date text string into a clean Python date object
+        booking_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+
+        # 4. Anti-Snaking Check: Is this car already booked for this exact date and session slot?
+        if InspectionBooking.objects.filter(car=car, date=booking_date, time_slot=time_slot).exists():
+            return JsonResponse({
+                'status': 'error', 
+                'message': 'This time slot is already reserved for this vehicle.'
+            }, status=400)
+
+        # 5. Everything looks pristine, create the database record!
+        InspectionBooking.objects.create(
+            car=car, name=name, phone=phone, email=email, date=booking_date, time_slot=time_slot
+        )
+
+        return JsonResponse({
+            'status': 'success', 
+            'message': 'Your luxury private viewing has been reserved successfully!'
+        })
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 # Fix for the terminal error landing page
 def landing_page(request):
     return render(request, 'showroom/landing.html')

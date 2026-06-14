@@ -83,6 +83,44 @@
     {% if not car.images.all and not car.additional_videos.all %}
         <p style="color: #555; text-align: center; padding: 30px; font-style: italic;">New showroom media modules rolling out shortly.</p>
     {% endif %}
+</div>
+<button type="button" class="btn-schedule-luxury" onclick="openInspectionModal()">
+    📅 Schedule Private Inspection
+</button>
+
+<!-- THE MODAL OVERLAY BACKDROP -->
+<div id="inspectionModal" class="luxury-modal-backdrop" style="display: none;">
+    <div class="luxury-modal-content">
+        <div class="modal-header">
+            <h2>Reserve Private Viewing</h2>
+            <button type="button" class="close-modal-btn" onclick="closeInspectionModal()">&times;</button>
+        </div>
+        <p class="modal-intro">Select your preferred date and session to view the <strong>{{ car.name }}</strong> in person.</p>
+        
+        <form id="inspectionForm" method="POST">
+            {% csrf_token %}
+            <div class="modal-grid-inputs">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="date" id="inspectionDate" name="date" required>
+            </div>
+
+            <div class="time-slot-picker">
+                <label style="color: #BF953F; display:block; margin-bottom: 10px; font-weight: 600;">Available Time Session:</label>
+                <div class="slots-container">
+                    <label class="slot-tile"><input type="radio" name="time_slot" value="10:00" required> <span>10:00 AM</span></label>
+                    <label class="slot-tile"><input type="radio" name="time_slot" value="12:00"> <span>12:00 PM</span></label>
+                    <label class="slot-tile"><input type="radio" name="time_slot" value="14:00"> <span>02:00 PM</span></label>
+                    <label class="slot-tile"><input type="radio" name="time_slot" value="16:00"> <span>04:00 PM</span></label>
+                </div>
+            </div>
+
+            <div id="modalMessage" style="margin-top: 15px; font-size: 0.9rem; display: none;"></div>
+
+            <button type="submit" class="btn-confirm-booking">Confirm Reservation</button>
+        </form>
+    </div>
 </div> 
 
 <div id="imageModal" onclick="closeModal()">
@@ -219,9 +257,138 @@
             oldVideo.remove();
         }
     }
+    function openInspectionModal() {
+        document.getElementById('inspectionModal').style.display = 'flex';
+        // Set minimum available datepicker configuration to today's date dynamically
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('inspectionDate').setAttribute('min', today);
+    }
+    
+    function closeInspectionModal() {
+        document.getElementById('inspectionModal').style.display = 'none';
+        document.getElementById('inspectionForm').reset();
+        document.getElementById('modalMessage').style.display = 'none';
+    }
+
+    // Intercept form submission to use AJAX asynchronous delivery pipeline
+    document.getElementById('inspectionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const form = this;
+        const msgDiv = document.getElementById('modalMessage');
+        const formData = new FormData(form);
+        
+        msgDiv.style.display = 'block';
+        msgDiv.style.color = '#FFD700';
+        msgDiv.innerText = "Processing reservation request...";
+
+        fetch("{% url 'book_inspection' car.id %}", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(res => {
+            if (res.status === 200) {
+                msgDiv.style.color = '#00E676';
+                msgDiv.innerText = res.body.message;
+                setTimeout(() => {
+                    closeInspectionModal();
+                }, 2000);
+            } else {
+                msgDiv.style.color = '#FF3D00';
+                msgDiv.innerText = res.body.message;
+            }
+        })
+        .catch(err => {
+            msgDiv.style.color = '#FF3D00';
+            msgDiv.innerText = "Connection error. Please try again.";
+        });
+    });
 </script>
 
 <style>
+    .btn-schedule-luxury {
+        background: transparent;
+        border: 2px solid #BF953F;
+        color: #fff;
+        padding: 14px 28px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        width: 100%;
+        margin-top: 20px;
+    }
+    .btn-schedule-luxury:hover {
+        background: #BF953F;
+        color: #000;
+        box-shadow: 0 0 15px rgba(191, 149, 63, 0.4);
+    }
+    .luxury-modal-backdrop {
+        position: fixed;
+        top:0; left:0; width:100%; height:100%;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .luxury-modal-content {
+        background: #111;
+        border: 1px solid rgba(191, 149, 63, 0.3);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 500px;
+        padding: 25px;
+        position: relative;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #222;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .modal-header h2 { color: #FFD700; font-size: 1.5rem; margin:0; }
+    .close-modal-btn { background:none; border:none; color:#aaa; font-size:1.8rem; cursor:pointer; }
+    .modal-intro { color: #aaa; font-size: 0.9rem; margin-bottom: 20px; }
+    
+    .modal-grid-inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .modal-grid-inputs input {
+        background: #222; border: 1px solid #444; color:#fff; padding: 12px; border-radius: 6px; outline:none;
+    }
+    .modal-grid-inputs input:focus { border-color: #BF953F; }
+
+    .slots-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+    .slot-tile input { display: none; }
+    .slot-tile span {
+        display: block; background: #222; border: 1px solid #444; text-align: center;
+        padding: 10px; border-radius: 6px; color:#fff; cursor: pointer; font-weight: 500; transition: 0.2s;
+    }
+    .slot-tile input:checked + span {
+        background: rgba(191, 149, 63, 0.2); border-color: #BF953F; color: #FFD700;
+    }
+    .btn-confirm-booking {
+        background: #FFD700; color:#000; width:100%; padding:14px; border:none; font-weight:bold; text-transform:uppercase; border-radius:6px; cursor:pointer;
+    }
 :root {
     --gold: #BF953F;
     --dark-bg: #0a0a0a;
