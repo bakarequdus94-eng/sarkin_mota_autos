@@ -67,11 +67,18 @@ WSGI_APPLICATION = "sarkin_mota.wsgi.application"
 
 # Database: Uses SQLite locally, PostgreSQL on Render
 DATABASES = {
-    'default': dj_database_url.config(
-       default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# Override database configuration safely on Render
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True
+    )
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

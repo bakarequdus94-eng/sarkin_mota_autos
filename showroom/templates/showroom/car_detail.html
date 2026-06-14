@@ -286,7 +286,8 @@
             method: "POST",
             body: formData,
             headers: {
-                "X-Requested-With": "XMLHttpRequest"
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": "{{ csrf_token }}" // <-- ADD THIS EXACT LINE HERE!
             }
         })
         .then(response => response.json().then(data => ({ status: response.status, body: data })))
