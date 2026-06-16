@@ -201,6 +201,92 @@
                 transform: translateY(0);
             }
         }
+        /* INFO MODAL OVERLAY BASE */
+        .info-modal {
+            display: none; /* Invisible by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px); /* Frosted glass blur effect */
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Layered on top of everything else */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* MODAL CONTENT CARD */
+        .modal-card {
+            background-color: rgba(17, 17, 17, 0.95);
+            border: 1px solid #BF953F; /* Elegant gold border accent */
+            width: 100%;
+            max-width: 500px;
+            padding: 35px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal-btn:hover {
+            color: #ffcc00;
+        }
+
+        .modal-title {
+            color: #BF953F;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 1.8rem;
+        }
+
+        .modal-divider {
+            height: 2px;
+            width: 50px;
+            background-color: #BF953F;
+            margin-bottom: 20px;
+        }
+
+        .modal-text {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        /* CONTACT LAYOUT HIGHLIGHTS */
+        .contact-item {
+            margin-bottom: 15px;
+        }
+
+        .contact-label {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-detail {
+            color: #ffffff;
+            margin: 3px 0 0 0;
+            font-size: 1rem;
+        }
 
         /* COMPACT SCREEN MEDIA VIEWPORT MEDIA LAYOUT (TABLETS, SPLIT SCREENS & PHONES) */
         @media (max-width: 768px) {
@@ -264,7 +350,7 @@
     </nav>
 
     <video class="video-background" autoplay loop muted playsinline>
-        <source src="https://assets.mixkit.co/videos/74/74-720.mp4" type="video/mp4">
+        <source src="{% static 'showroom/videos/bg-car.mp4' %}" type="video/mp4">
     </video>
     
     <div class="video-overlay"></div>
@@ -276,22 +362,100 @@
 
     <a href="{% url 'car_list' %}" class="enter-btn">Enter Showroom</a>
 
-    <script>
+    <div class="info-modal" id="aboutModal">
+        <div class="modal-card">
+            <button class="close-modal-btn" id="closeAbout">&times;</button>
+            <h2 class="modal-title">About Us</h2>
+            <div class="modal-divider"></div>
+            <p class="modal-text">
+                Welcome to <strong>Sarkin Mota Autos</strong>, where luxury meets performance. We are a premier automotive dealership dedicated to sourcing, inspecting, and delivering top-tier luxury, sports, and exotic vehicles.
+            </p>
+            <p class="modal-text">
+                Our mission is built on absolute transparency, uncompromising quality, and an elite vehicle acquisition experience tailored for car enthusiasts who demand the absolute best.
+            </p>
+        </div>
+    </div>
+
+    <div class="info-modal" id="contactModal">
+        <div class="modal-card">
+            <button class="close-modal-btn" id="closeContact">&times;</button>
+            <h2 class="modal-title">Contact Us</h2>
+            <div class="modal-divider"></div>
+            
+            <div class="contact-item">
+                <span class="contact-label">Location:</span>
+                <p class="contact-detail">Ijebu Ode, Ogun State, Nigeria</p>
+            </div>
+            
+            <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <p class="contact-detail">info@sarkinmotaautos.com</p>
+            </div>
+
+            <div class="contact-item">
+                <span class="contact-label">Phone:</span>
+                <p class="contact-detail">+234 800 SARKIN MOTA</p>
+            </div>
+        </div>
+    </div>
+     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             const navMenu = document.getElementById('navMenu');
 
+            // Modal Selectors
+            const aboutModal = document.getElementById('aboutModal');
+            const contactModal = document.getElementById('contactModal');
+            
+            // Link Trigger Selectors
+            const aboutLink = document.querySelector('a[href="#about"]');
+            const contactLink = document.querySelector('a[href="#contact"]');
+            
+            // Close Button Selectors
+            const closeAbout = document.getElementById('closeAbout');
+            const closeContact = document.getElementById('closeContact');
+
+            // 1. Toggle Hamburger Menu
             hamburgerBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 navMenu.classList.toggle('active');
             });
-            
+
+            // 2. Open About Us Modal
+            aboutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                navMenu.classList.remove('active'); // Tuck menu away
+                aboutModal.style.display = 'flex';
+            });
+
+            // 3. Open Contact Us Modal
+            contactLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                navMenu.classList.remove('active'); // Tuck menu away
+                contactModal.style.display = 'flex';
+            });
+
+            // 4. Close Modals via X buttons
+            closeAbout.addEventListener('click', function() {
+                aboutModal.style.display = 'none';
+            });
+            closeContact.addEventListener('click', function() {
+                contactModal.style.display = 'none';
+            });
+
+            // 5. Close handling if user clicks out on the dark blur background
             document.addEventListener('click', function(event) {
                 if (!hamburgerBtn.contains(event.target) && !navMenu.contains(event.target)) {
                     navMenu.classList.remove('active');
                 }
+                if (event.target === aboutModal) {
+                    aboutModal.style.display = 'none';
+                }
+                if (event.target === contactModal) {
+                    contactModal.style.display = 'none';
+                }
             });
         });
-    </script>  
+    </script>
 </body>
 </html>
