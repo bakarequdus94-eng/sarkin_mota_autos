@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Car, CarImage, CarVideo, Review
-from .models import Car, Review, InspectionBooking
+from .models import Car, CarImage, CarVideo, Review, InspectionBooking
 
 @admin.register(InspectionBooking)
 class InspectionBookingAdmin(admin.ModelAdmin):
     list_display = ('car', 'name', 'date', 'time_slot', 'created_at')
     list_filter = ('date', 'time_slot', 'car')
     search_fields = ('name', 'email', 'phone', 'car__name')
+
 # Add multiple photos directly inside the Car admin page
 class CarImageInline(admin.TabularInline):
     model = CarImage
@@ -25,21 +25,15 @@ class CarAdmin(admin.ModelAdmin):
     list_filter = ('brand', 'condition', 'is_available', 'body_type')
     search_fields = ('name', 'brand', 'description')
     ordering = ('-created_at',)
+    # THIS LINE WAS MISSING: This links your image and video slots directly into the car page!
+    inlines = [CarImageInline, CarVideoInline]
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    # This makes the reviews pop up cleanly in a table view
     list_display = ('name', 'car', 'rating', 'email', 'created_at')
-    
-    # Allows you to instantly filter by rating (e.g., view all 1-star or 5-star reviews)
     list_filter = ('rating', 'created_at', 'car')
-    
-    # Let's you quickly search through comments or reviewer names
     search_fields = ('name', 'comment', 'email')
-    
-    # Sorts them so the newest inspection reviews appear at the very top
     ordering = ('-created_at',)
-
 
 # Optional separate endpoints for single actions
 admin.site.register(CarImage)
